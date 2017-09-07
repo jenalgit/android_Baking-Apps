@@ -20,15 +20,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_layout_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="InconsistentLayout">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"
-        tools:ignore="InconsistentLayout" />
+        app:layout_constraintGuide_percent="0.5" />
 
 
     <FrameLayout
