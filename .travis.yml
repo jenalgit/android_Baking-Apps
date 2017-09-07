@@ -13,7 +13,7 @@ android:
   - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else
     ./gradlew clean lint test assembleRelease;fi
 before_install:
-- echo $secret_password | gpg --passphrase-fd 0 configuration-release.txt.gpg
+- echo $secret_password | gpg --passphrase-fd 0 configuration-release.tar.gpg
   -d
 - tar xvf configuration-release.tar
 - chmod +x gradlew
