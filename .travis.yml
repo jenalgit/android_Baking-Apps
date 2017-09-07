@@ -10,9 +10,11 @@ android:
   - build-tools-26.0.1
   - android-26
   script:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else ./gradlew clean lint test assembleRelease;fi
+  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else
+    ./gradlew clean lint test assembleRelease;fi
 before_install:
-- openssl aes-256-cbc -k "$password_configuration" -in configuration-release.tar.enc -out configuration-release.tar -d
+- echo $secret_password | gpg --passphrase-fd 0 configuration-release.txt.gpg
+  -d
 - tar xvf configuration-release.tar
 - chmod +x gradlew
 deploy:
@@ -27,4 +29,4 @@ deploy:
     branch: master
 env:
   global:
-    secure: Oj+HQbGAd+zb24OgUFDOGlNgT1YvpCXUV/+LGc2CG27EqnLHZ7xejEY0t3+DzP6m9QM6Vyuo2WXOgYlvVuO6ocjJJ6uARYUkJpPWyNlhX+ZIHSvvUu0eFn0WPWT8UGHHhzk6xmuIa+vIW8qYi6C3+nldN6lcsVOpKvgVNoih2YsAjNtTN/4+X1ARZ85ARCiWW3rKJJVcCASeG33QHkE4E39ea54Qz80LzcrIjx8EC1mNaIjb7RpP6f8a0WVtCDd4L+nea/7XP+AxDA/2RutykAejKoyKp6o8hNr0iK6rQHzNvTXzAL7ZQvPVT/hKjanCKYckxkVs1Nthl61zAjR8TVRCH1ddSYAy341B4RmEpDF4milCs+vc9TjBy+PjVU3niVz7v1t1U8VAksGclDmXYFbHDcmMkiM1QheNnuY+6SShCY6YylsJIcF/3o+A7/yEoC3I7e4SIV0ESIwZ4XVvkLMEyr9ouf0nPEFkNJ5Y+xAa/Vk0RvL9xlSO+bhLF0myV5mUmu7khri74ol7xq9nSQ5R0uY+3hhhn8ue6d56i2jWyzomJvC8VpLwUPfiwrT5UUovCHhszKjWccyvVoHh9gPPl6N+2TC93UtHaXw9c6TO380U+R/fePL/Fl9wyK7m+nd3uUeYPpMiW6TDXBpszOZcATdGsrUFLE2XhbRVYpw=
+    secure: rNr255SGGFLZY2riTW4XA0Vu8fHIiRrF688NwEXGQVfOGfUQxa3gcnLKc0w4QJ12eaG/ywRwuCOf9E1qQtxjM2Yq4NdeMQxKNhkZRBUG4wz63Qmx1D2eYnKPtEQG8EIu4NlFCTnBiwxHRQ1F6CynFT+2lyoaMnbT13i866p4EMFEpnJ94Wm0WGzKRuxJ53rimPVNNxX4d6Hvx1xsIiQqADhVZzNZ9PKfO44woilJB/SPF/HD2MJM1nU9L4oUrnrBHHdBJ1hNU+pBxfCDOLWVDPskBKGoSY/V9mJImaKB60DcVQLfl3Qvh4aVM/BqedZ28j/c3B2pSuFwd1wIx1mxhK2OFbfuxgg+PizXjMZQM+Z/fj+NsCz5KEJj8LficGP2b1sHodTUmmOkgrFIzTwNtCFn2EbtLHqLfxKFNdhvIv1uKVIPlJAzVDpS8W5E8H4SvtBBGzjcXyMJe6yaw1HkXW6GPexTUXjjNWvpOvfuy9tXmi7T5WgYVtcOkZinBsnQY355ay3Au5ZS5xj2cKjY/pom34YmnD1PvXWb9nVe7v8pyiJY2OMJGqgt3ycPDclR7H7hH7+OiiqpecJW1CKpjov9gZGNkdEmrHDGUDTOQy6FRYYURgQcb08Mr1jTWxdUYXfwRpbv5oNP5KSH3I05PCMTDmz+rdZSA/uGEDyMkMQ=
