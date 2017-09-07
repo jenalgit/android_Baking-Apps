@@ -24,6 +24,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +37,7 @@ import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import com.ngengs.android.baking.apps.IdlingResource.BakingIdlingResource;
 import com.ngengs.android.baking.apps.adapters.RecipesAdapter;
 import com.ngengs.android.baking.apps.data.Ingredient;
 import com.ngengs.android.baking.apps.data.Recipe;
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
 
     private RecipesAdapter mAdapter;
     private int mAppWidgetId;
+
+    @Nullable
+    private BakingIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +147,10 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
                                          AppWidgetManager.INVALID_APPWIDGET_ID);
             Timber.d("onCreate: %s: %s", "App Widget Id Now", mAppWidgetId);
         }
+        getIdlingResource();
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
     }
 
     @Override
@@ -152,11 +163,21 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
     private void loadDataFromSavedInstanceState(Bundle savedInstanceState) {
         List<Recipe> data = savedInstanceState.getParcelableArrayList("DATA");
         if (data != null) {
-            if (data.size() > 0) mAdapter.addData(data);
+            if (data.size() > 0) {
+                mAdapter.addData(data);
+
+                if (mIdlingResource != null) {
+                    mIdlingResource.setIdleState(true);
+                }
+            }
             else loadDataFromRemote();
         } else {
             Timber.w("loadDataFromSavedInstanceState: %s",
                      "Data from saved instance state is null");
+
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(true);
+            }
         }
     }
 
@@ -188,6 +209,10 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
             mPromptText.setText(R.string.error_load_recipes);
             mPromptProgress.setVisibility(View.GONE);
         }
+
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(true);
+        }
     }
 
     @Override
@@ -196,5 +221,23 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
         mPromptImage.setImageDrawable(ResourceHelpers.getDrawable(this, R.drawable.ic_cloud_off));
         mPromptText.setText(R.string.error_load_recipes);
         mPromptProgress.setVisibility(View.GONE);
+
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(true);
+        }
+    }
+
+
+    /**
+     * Only called from test, creates and returns a new {@link com.ngengs.android.baking.apps.IdlingResource.BakingIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        Timber.d("getIdlingResource() called");
+        if (mIdlingResource == null) {
+            mIdlingResource = new BakingIdlingResource();
+        }
+        return mIdlingResource;
     }
 }
