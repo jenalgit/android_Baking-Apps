@@ -52,6 +52,7 @@ public class RecipeFragment extends Fragment {
 
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
+    private StepAdapter mStepAdapter;
 
 
     private OnFragmentInteractionListener mListener;
@@ -109,15 +110,16 @@ public class RecipeFragment extends Fragment {
         mRecyclerIngredient.setAdapter(new IngredientAdapter(mIngredientList));
         mRecyclerStep.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerStep.setHasFixedSize(true);
-        mRecyclerStep.setAdapter(new StepAdapter(getContext(), mStepList,
-                                                 new StepAdapter.OnClickListener() {
-                                                     @Override
-                                                     public void onClickStep(int position) {
-                                                         if (mListener != null) {
-                                                             mListener.onRecipeStepClick(position);
-                                                         }
-                                                     }
-                                                 }));
+        mStepAdapter = new StepAdapter(getContext(), mStepList,
+                                       new StepAdapter.OnClickListener() {
+                                           @Override
+                                           public void onClickStep(int position) {
+                                               if (mListener != null) {
+                                                   mListener.onRecipeStepClick(position);
+                                               }
+                                           }
+                                       });
+        mRecyclerStep.setAdapter(mStepAdapter);
         ViewCompat.setNestedScrollingEnabled(mRecyclerIngredient, false);
         ViewCompat.setNestedScrollingEnabled(mRecyclerStep, false);
         return view;
@@ -140,6 +142,12 @@ public class RecipeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void changeSelectedStep(int position) {
+        if (mStepAdapter != null && mStepAdapter.getItemCount() >= position) {
+            mStepAdapter.indicatorSelected(position);
+        }
     }
 
     /**

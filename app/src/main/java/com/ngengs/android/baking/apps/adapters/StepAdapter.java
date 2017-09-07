@@ -42,12 +42,14 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private final List<Step> mData;
     private final Context mContext;
     private final StepAdapter.OnClickListener mClickListener;
+    private int selectedPosition;
 
     public StepAdapter(Context mContext, List<Step> mData,
                        StepAdapter.OnClickListener mClickListener) {
         this.mContext = mContext;
         this.mData = new ArrayList<>(mData);
         this.mClickListener = mClickListener;
+        selectedPosition = -1;
     }
 
     @Override
@@ -74,6 +76,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
         if (TextUtils.isEmpty(data.getVideoURL()) && TextUtils.isEmpty(data.getThumbnailURL())) {
             Glide.with(mContext).clear(holder.mStepImageThumbnail);
         }
+        holder.mIndicatorSelected.setVisibility(
+                (selectedPosition == position) ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -83,6 +87,13 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
 
     private void loadImage(@NonNull String imageUrl, ImageView imageView) {
         Glide.with(mContext).asBitmap().load(imageUrl).thumbnail(0.05f).into(imageView);
+    }
+
+    public void indicatorSelected(int newPosition) {
+        int temp = selectedPosition;
+        selectedPosition = newPosition;
+        if (temp >= 0) notifyItemChanged(temp);
+        if (selectedPosition >= 0) notifyItemChanged(selectedPosition);
     }
 
     public interface OnClickListener {
@@ -98,6 +109,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
         TextView mStepNumber;
         @BindView(R.id.stepShortDescription)
         TextView mStepShortDescription;
+        @BindView(R.id.indicatorSelected)
+        View mIndicatorSelected;
 
         ViewHolder(View view) {
             super(view);

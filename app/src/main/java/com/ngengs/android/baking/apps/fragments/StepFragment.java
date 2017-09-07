@@ -149,11 +149,16 @@ public class StepFragment extends Fragment {
         return mFullScreen;
     }
 
-    private void releasePlayer() {
+    public void releasePlayer() {
         if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
         }
     }
+
+    public int getStepId() {
+        return mData.getId();
+    }
+
 }

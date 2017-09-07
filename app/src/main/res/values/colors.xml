@@ -22,4 +22,5 @@
 
     <color name="colorTintDrawable">#FFF</color>
     <color name="colorTextInDark">#FFF</color>
+    <color name="colorStepSelected">#B400BCD4</color>
 </resources>
