@@ -15,16 +15,25 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<resources>
-    <color name="colorPrimary">#00BCD4</color>
-    <color name="colorPrimaryDark">#0097A7</color>
-    <color name="colorAccent">#FF4081</color>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/colorWidgetBackgroundIngredient">
 
-    <color name="colorTintDrawable">#FFF</color>
-    <color name="colorTextInDark">#FFF</color>
-    <color name="colorStepSelected">#B400BCD4</color>
+    <TextView
+        android:id="@+id/text_ingredient_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/margin_default" />
 
-    <!--Widget-->
-    <color name="colorWidgetBackgroundEmpty">#BD000000</color>
-    <color name="colorWidgetBackgroundIngredient">#FFF</color>
-</resources>
+    <TextView
+        android:id="@+id/text_ingredient_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="@dimen/margin_default"
+        android:textStyle="italic" />
+
+</LinearLayout>

@@ -33,4 +33,5 @@
     <string name="content_description_placeholder_step">Placeholder Step</string>
     <string name="content_description_step_image_thumbnail">Step Image Thumbnail</string>
     <string name="content_description_step_video_indicator">Step Video Indicator</string>
+    <string name="content_description_application_logo">Application Logo</string>
 </resources>

@@ -15,16 +15,13 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<resources>
-    <color name="colorPrimary">#00BCD4</color>
-    <color name="colorPrimaryDark">#0097A7</color>
-    <color name="colorAccent">#FF4081</color>
-
-    <color name="colorTintDrawable">#FFF</color>
-    <color name="colorTextInDark">#FFF</color>
-    <color name="colorStepSelected">#B400BCD4</color>
-
-    <!--Widget-->
-    <color name="colorWidgetBackgroundEmpty">#BD000000</color>
-    <color name="colorWidgetBackgroundIngredient">#FFF</color>
-</resources>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/widget_basic"
+    android:initialLayout="@layout/widget_basic"
+    android:minHeight="@dimen/widget_height"
+    android:minWidth="@dimen/widget_width"
+    android:previewImage="@drawable/widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:configure="com.ngengs.android.baking.apps.MainActivity"
+    android:widgetCategory="home_screen" />

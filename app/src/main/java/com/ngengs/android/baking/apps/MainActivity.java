@@ -17,6 +17,8 @@
 
 package com.ngengs.android.baking.apps;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -29,12 +31,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.ngengs.android.baking.apps.adapters.RecipesAdapter;
+import com.ngengs.android.baking.apps.data.Ingredient;
 import com.ngengs.android.baking.apps.data.Recipe;
 import com.ngengs.android.baking.apps.remotes.Connection;
 import com.ngengs.android.baking.apps.utils.ResourceHelpers;
+import com.ngengs.android.baking.apps.widget.ListRemoteViewsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
 
 
     private RecipesAdapter mAdapter;
+    private int mAppWidgetId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +73,43 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
         mAdapter = new RecipesAdapter(this, new RecipesAdapter.OnClickListener() {
             @Override
             public void onClick(Recipe recipe) {
                 Timber.d("onClick: %s", recipe.getName());
-                Intent intent = new Intent(getBaseContext(), RecipeActivity.class);
-                intent.putExtra("DATA", recipe);
-                startActivity(intent);
+                if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                    Intent intent = new Intent(getBaseContext(), RecipeActivity.class);
+                    intent.putExtra("DATA", recipe);
+                    startActivity(intent);
+                } else {
+                    Timber.d("onClick: %s. Widget Id:", "Finishing widget configuration",
+                             mAppWidgetId);
+                    Context mContext = getApplicationContext();
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                    RemoteViews views = new RemoteViews(getBaseContext().getPackageName(),
+                                                        R.layout.widget_configured);
+                    views.setTextViewText(R.id.widget_title, recipe.getName());
+                    Intent ingredientWidgetListIntent = new Intent(mContext,
+                                                                   ListRemoteViewsService.class);
+                    ArrayList<String> dataIngredient = new ArrayList<>();
+                    ArrayList<String> dataIngredientQuantity = new ArrayList<>();
+                    for (Ingredient mIngredient : recipe.getIngredients()) {
+                        dataIngredient.add(mIngredient.getIngredient());
+                        dataIngredientQuantity.add(String.format("%s %s", mIngredient.getQuantity(),
+                                                                 mIngredient.getMeasure()));
+                    }
+                    ingredientWidgetListIntent.putStringArrayListExtra("INGREDIENT",
+                                                                       dataIngredient);
+                    ingredientWidgetListIntent.putStringArrayListExtra("QUANTITY",
+                                                                       dataIngredientQuantity);
+                    views.setRemoteAdapter(R.id.widget_list, ingredientWidgetListIntent);
+                    appWidgetManager.updateAppWidget(mAppWidgetId, views);
+                    Intent intentWidget = new Intent();
+                    intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    setResult(RESULT_OK, intentWidget);
+                    finish();
+                }
             }
         });
         mRecyclerRecipes.setHasFixedSize(true);
@@ -95,6 +131,14 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
         } else {
             Timber.d("onCreate: %s", "New Launch");
             loadDataFromRemote();
+        }
+        Timber.d("onCreate: %s: %s", "App Widget Id", mAppWidgetId);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Timber.d("onCreate: %s", "Extras not empty");
+            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                         AppWidgetManager.INVALID_APPWIDGET_ID);
+            Timber.d("onCreate: %s: %s", "App Widget Id Now", mAppWidgetId);
         }
     }
 
