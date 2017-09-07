@@ -38,6 +38,7 @@ public class ResourceHelpers {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             placeholder = context.getResources().getDrawable(drawableId, null);
         } else {
+            //noinspection RestrictedApi
             placeholder = AppCompatDrawableManager.get().getDrawable(context, drawableId);
         }
         return placeholder;

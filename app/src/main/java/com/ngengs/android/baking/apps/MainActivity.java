@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Timber.d("onSaveInstanceState() called with: outState = [" + outState + "]");
+        Timber.d("onSaveInstanceState() called with: outState = [%s]", outState);
         outState.putParcelableArrayList("DATA", new ArrayList<Parcelable>(mAdapter.getData()));
         super.onSaveInstanceState(outState);
     }
