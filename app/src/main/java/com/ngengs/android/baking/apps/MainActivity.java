@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
                     intent.putExtra("DATA", recipe);
                     startActivity(intent);
                 } else {
-                    Timber.d("onClick: %s. Widget Id:", "Finishing widget configuration",
+                    Timber.d("onClick: %s. Widget Id: %s", "Finishing widget configuration",
                              mAppWidgetId);
                     Context mContext = getApplicationContext();
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
