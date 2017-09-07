@@ -1,0 +1,29 @@
+language: android
+jdk:
+- oraclejdk8
+android:
+  components:
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - platform-tools
+  - tools
+  - build-tools-26.0.1
+  - android-26
+  script:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else
+    ./gradlew clean lint test assembleRelease;fi
+before_install:
+- openssl aes-256-cbc -K $encrypted_734761d610ab_key -iv $encrypted_734761d610ab_iv
+  -in configuration-release.tar.enc -out configuration-release.tar -d
+- tar xvf configuration-release.tar
+- chmod +x gradlew
+deploy:
+  provider: releases
+  api_key:
+    secure: O7okXVtzoIdKRPKCFEeVftRZm7qYTzo0TxTIirExbcqmfCAtvirpqcdaF54+gwpKW5rRLwbXfYGiDSqsJ7QN+5X/iDB5gC/WwqcLVgLjR5OOfxjnBmzy2PYQC9phu1a4KRrThHKATy4hJInsMflCEZqcxknTyjP7KQl1H7YOC0eJioImS2qY10JbSEtSFk+pSkgUijCHlBjHO1XZZr4HD9VVw8wk897Ncx/h987q/NBICOgw5GuRau8kXvS3rbzao+OBTAQAHMLREoeRQ+2qXTLb19w3KTfDhoR3HAuUpLa/lGbUX80WGFrW8XvC7gJeTFhul1GNLdMbLKwZ0cH8tJl2YIHPxUOmdvolMGyNQM5T++4is6LTE3gmIGSwpRGfe1PjP9qV+WMhmYLs40Kr7tTYRK1RbYHQFKoRu32Uxzzx2CHOz/LStSzaSzcKFpIIJwWrjQYDTBpfAvk+EKw9qHMmDJVNrDbmyZudSlMFqLrDoyrHSKrsbhp1oX4V5BhqmesM5t8K8mM2H1UyW4o8O6Un87keouYouVjVIEGdermw/DzstHflVRlqeqvc5Hrmw2DYWwqtbZVCqzu4XnvjOEAm9ClrXN1lqbVFrBeWcV9VEsyneolNokV2U7LEJ7BXKnhNx9K+n2U1qATvmDG6AwWlDSypSi22x9L85jxuxok=
+  file_glob: true
+  file: "app/build/output/*-release.apk"
+  skip_cleanup: true
+  on:
+    repo: ngengs/android_Baking-Apps
+    branch: master
