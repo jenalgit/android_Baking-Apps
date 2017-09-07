@@ -23,8 +23,8 @@ android:
   - sys-img-armeabi-v7a-android-22
 
 script:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else
-    ./gradlew clean lint test;fi
+  - ./gradlew clean lint test
+  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew assembleRelease; fi
 
 # Emulator Management: Create, Start and Wait
 before_script:
