@@ -48,6 +48,7 @@ public class RecipeActivity extends AppCompatActivity
     @Nullable
     @BindView(R.id.guideline)
     Guideline mGuideline;
+    @Nullable
     @BindView(R.id.constraint_layout_root)
     ConstraintLayout mConstraintLayoutRoot;
 
