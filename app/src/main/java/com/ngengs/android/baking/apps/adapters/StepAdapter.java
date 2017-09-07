@@ -37,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private final List<Step> mData;
@@ -90,6 +91,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     public void indicatorSelected(int newPosition) {
+        Timber.d("indicatorSelected() called with: newPosition = [%s]", newPosition);
         int temp = selectedPosition;
         selectedPosition = newPosition;
         if (temp >= 0) notifyItemChanged(temp);

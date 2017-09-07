@@ -37,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
 
@@ -88,6 +89,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
             int position = mData.size();
             mData.addAll(data);
             notifyItemRangeInserted(position, data.size());
+        } else {
+            Timber.w("addData: %s", "Data empty");
         }
     }
 

@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
         if (data != null) {
             if (data.size() > 0) mAdapter.addData(data);
             else loadDataFromRemote();
+        } else {
+            Timber.w("loadDataFromSavedInstanceState: %s",
+                     "Data from saved instance state is null");
         }
     }
 
@@ -179,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
             mPromptLayout.setVisibility(View.GONE);
             mRecyclerRecipes.setVisibility(View.VISIBLE);
         } else {
+            Timber.w("onResponse: %s: %s", "Cant get data from remote", call);
             mPromptImage.setImageDrawable(
                     ResourceHelpers.getDrawable(this, R.drawable.ic_cloud_off));
             mPromptText.setText(R.string.error_load_recipes);

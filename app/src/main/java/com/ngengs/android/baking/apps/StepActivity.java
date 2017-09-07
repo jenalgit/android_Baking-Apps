@@ -105,7 +105,7 @@ public class StepActivity extends AppCompatActivity {
                                  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             if (getSupportActionBar() != null) getSupportActionBar().hide();
         } else {
-            Timber.d("changeLayoutToFullscreen: %s", "potrait");
+            Timber.d("changeLayoutToFullscreen: %s", "portrait");
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             if (getSupportActionBar() != null) getSupportActionBar().show();
         }
@@ -155,6 +155,8 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void changeStep(int positionNow, boolean forceExitFullScreen) {
+        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s]",
+                 positionNow, forceExitFullScreen);
         mActivePosition = positionNow;
         mStepIndicator.setText(
                 String.format("%s/%s", (mActivePosition + 1), mData.getSteps().size()));
