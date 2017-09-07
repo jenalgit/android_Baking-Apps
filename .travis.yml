@@ -12,7 +12,7 @@ android:
   script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean assembleRelease; else ./gradlew clean lint test assembleRelease;fi
 before_install:
-- openssl aes-256-cbc -k "password_configuration" -in configuration-release.tar.enc -out configuration-release.tar -d
+- openssl aes-256-cbc -k "$password_configuration" -in configuration-release.tar.enc -out configuration-release.tar -d
 - tar xvf configuration-release.tar
 - chmod +x gradlew
 deploy:
