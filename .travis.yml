@@ -68,3 +68,10 @@ env:
   matrix:
     - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a
+
+after_failure:
+  - wget http://imgur.com/tools/imgurbash.sh
+  - chmod a+x imgurbash.sh
+  - adb shell screencap -p | sed 's/\r$//' &gt; screen.png
+  - ./imgurbash.sh screen.png
+  - cat $TRAVIS_BUILD_DIR/app/build/reports/lint-results.xml
