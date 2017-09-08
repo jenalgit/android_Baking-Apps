@@ -22,7 +22,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -38,12 +37,10 @@ public class MainActivityStartTest {
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(
             MainActivity.class);
 
-    @Test
     public void testRecyclerRecipe_Hidden() {
         onView(ViewMatchers.withId(R.id.recyclerRecipes)).check(matches(not(isDisplayed())));
     }
 
-    @Test
     public void testPromptLayout_Displayed() {
         onView(ViewMatchers.withId(R.id.prompt_layout)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.prompt_image)).check(matches(isDisplayed()));
