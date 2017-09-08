@@ -71,8 +71,8 @@ env:
     - ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a
 
 after_failure:
-  - wget http://imgur.com/tools/imgurbash.sh
+  - wget https://raw.githubusercontent.com/tremby/imgur.sh/master/imgur.sh
   - chmod a+x imgurbash.sh
-  - adb shell screencap -p | sed 's/\r$//' > screen.png
-  - ./imgurbash.sh screen.png
+  - adb shell screencap -p | sed 's/\r$//' > screen-$(date +"%T").png
+  - ./imgurbash.sh screen-*.png
   - cat $TRAVIS_BUILD_DIR/app/build/reports/lint-results.xml
