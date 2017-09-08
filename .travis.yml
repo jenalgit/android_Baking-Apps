@@ -33,9 +33,8 @@ cache:
     - $HOME/.android/build-cache
 
 script:
-  - if [[ "$TRAVIS_BRANCH" != "master" ]];then ./gradlew connectedCheck -PdisablePreDex --continue --stacktrace; fi
-  - ./gradlew clean lint test
-  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew assembleRelease; fi
+  - if [[ "$TRAVIS_BRANCH" != "master" ]];then ./gradlew clean lint test connectedCheck -PdisablePreDex --continue --stacktrace; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean lint test assembleRelease; fi
 
 # Emulator Management: Create, Start and Wait
 before_script:
@@ -73,6 +72,6 @@ env:
 after_failure:
   - wget https://raw.githubusercontent.com/tremby/imgur.sh/master/imgur.sh
   - chmod a+x imgurbash.sh
-  - adb shell screencap -p | sed 's/\r$//' > screen-$(date +"%T").png
-  - ./imgurbash.sh screen-*.png
+  - adb shell screencap -p | sed 's/\r$//' > screen.png
+  - ./imgurbash.sh screen.png
   - cat $TRAVIS_BUILD_DIR/app/build/reports/lint-results.xml
