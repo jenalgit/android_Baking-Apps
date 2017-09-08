@@ -22,7 +22,6 @@ import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.WindowManager;
 
 import org.junit.After;
 import org.junit.Before;
@@ -50,19 +49,6 @@ public class MainActivityRecipeListTest {
     public void registerIdlingResource() {
         mIdlingResource = mainActivityActivityTestRule.getActivity().getIdlingResource();
         IdlingRegistry.getInstance().register(mIdlingResource);
-    }
-
-    @Before
-    public void unlockScreen() {
-        final MainActivity activity = mainActivityActivityTestRule.getActivity();
-        Runnable wakeUpDevice = new Runnable() {
-            public void run() {
-                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                                              WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                                              WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        };
-        activity.runOnUiThread(wakeUpDevice);
     }
 
     @Test
