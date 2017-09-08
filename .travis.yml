@@ -4,12 +4,11 @@ jdk:
 sudo: false
 android:
   components:
-  - extra-google-m2repository
-  - extra-android-m2repository
   - platform-tools
   - tools
   - build-tools-26.0.1
-  - android-22
+  - android-16
+  - android-23
   - android-26
 
   # Additional components
@@ -20,7 +19,8 @@ android:
 
   # Specify at least one system image,
   # if you need to run emulator(s) during your tests
-  - sys-img-armeabi-v7a-android-22
+  - sys-img-armeabi-v7a-android-16
+  - sys-img-armeabi-v7a-android-23
 
 script:
   - ./gradlew clean lint test
@@ -28,9 +28,11 @@ script:
 
 # Emulator Management: Create, Start and Wait
 before_script:
-  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - android list targets
+  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
+  - adb devices
   - adb shell input keyevent 82 &
 
 before_install:
@@ -51,4 +53,8 @@ deploy:
 
 env:
   global:
-    secure: rNr255SGGFLZY2riTW4XA0Vu8fHIiRrF688NwEXGQVfOGfUQxa3gcnLKc0w4QJ12eaG/ywRwuCOf9E1qQtxjM2Yq4NdeMQxKNhkZRBUG4wz63Qmx1D2eYnKPtEQG8EIu4NlFCTnBiwxHRQ1F6CynFT+2lyoaMnbT13i866p4EMFEpnJ94Wm0WGzKRuxJ53rimPVNNxX4d6Hvx1xsIiQqADhVZzNZ9PKfO44woilJB/SPF/HD2MJM1nU9L4oUrnrBHHdBJ1hNU+pBxfCDOLWVDPskBKGoSY/V9mJImaKB60DcVQLfl3Qvh4aVM/BqedZ28j/c3B2pSuFwd1wIx1mxhK2OFbfuxgg+PizXjMZQM+Z/fj+NsCz5KEJj8LficGP2b1sHodTUmmOkgrFIzTwNtCFn2EbtLHqLfxKFNdhvIv1uKVIPlJAzVDpS8W5E8H4SvtBBGzjcXyMJe6yaw1HkXW6GPexTUXjjNWvpOvfuy9tXmi7T5WgYVtcOkZinBsnQY355ay3Au5ZS5xj2cKjY/pom34YmnD1PvXWb9nVe7v8pyiJY2OMJGqgt3ycPDclR7H7hH7+OiiqpecJW1CKpjov9gZGNkdEmrHDGUDTOQy6FRYYURgQcb08Mr1jTWxdUYXfwRpbv5oNP5KSH3I05PCMTDmz+rdZSA/uGEDyMkMQ=
+    - ADB_INSTALL_TIMEOUT=15
+    - secure: rNr255SGGFLZY2riTW4XA0Vu8fHIiRrF688NwEXGQVfOGfUQxa3gcnLKc0w4QJ12eaG/ywRwuCOf9E1qQtxjM2Yq4NdeMQxKNhkZRBUG4wz63Qmx1D2eYnKPtEQG8EIu4NlFCTnBiwxHRQ1F6CynFT+2lyoaMnbT13i866p4EMFEpnJ94Wm0WGzKRuxJ53rimPVNNxX4d6Hvx1xsIiQqADhVZzNZ9PKfO44woilJB/SPF/HD2MJM1nU9L4oUrnrBHHdBJ1hNU+pBxfCDOLWVDPskBKGoSY/V9mJImaKB60DcVQLfl3Qvh4aVM/BqedZ28j/c3B2pSuFwd1wIx1mxhK2OFbfuxgg+PizXjMZQM+Z/fj+NsCz5KEJj8LficGP2b1sHodTUmmOkgrFIzTwNtCFn2EbtLHqLfxKFNdhvIv1uKVIPlJAzVDpS8W5E8H4SvtBBGzjcXyMJe6yaw1HkXW6GPexTUXjjNWvpOvfuy9tXmi7T5WgYVtcOkZinBsnQY355ay3Au5ZS5xj2cKjY/pom34YmnD1PvXWb9nVe7v8pyiJY2OMJGqgt3ycPDclR7H7hH7+OiiqpecJW1CKpjov9gZGNkdEmrHDGUDTOQy6FRYYURgQcb08Mr1jTWxdUYXfwRpbv5oNP5KSH3I05PCMTDmz+rdZSA/uGEDyMkMQ=
+  matrix:
+    - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a
