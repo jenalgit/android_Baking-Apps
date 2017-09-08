@@ -33,8 +33,9 @@ cache:
     - $HOME/.android/build-cache
 
 script:
-  - if [[ "$TRAVIS_BRANCH" != "master" ]];then ./gradlew clean lint test connectedCheck -PdisablePreDex --continue --stacktrace; fi
-  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew clean lint test assembleRelease; fi
+  - ./gradlew clean lint test
+  - if [[ "$TRAVIS_BRANCH" != "master" ]];then adb shell input keyevent 82 & ./gradlew connectedCheck -PdisablePreDex --continue --stacktrace; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew assembleRelease; fi
 
 # Emulator Management: Create, Start and Wait
 before_script:
