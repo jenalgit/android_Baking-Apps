@@ -48,6 +48,9 @@ public class Ingredient implements Parcelable {
         ingredient = in.readString();
     }
 
+    public Ingredient() {
+    }
+
     public double getQuantity() {
         return quantity;
     }

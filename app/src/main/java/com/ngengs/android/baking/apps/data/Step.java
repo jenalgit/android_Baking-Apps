@@ -46,6 +46,9 @@ public class Step implements Parcelable {
     @SerializedName("thumbnailURL")
     private String thumbnailURL;
 
+    public Step() {
+    }
+
     protected Step(Parcel in) {
         id = in.readInt();
         shortDescription = in.readString();

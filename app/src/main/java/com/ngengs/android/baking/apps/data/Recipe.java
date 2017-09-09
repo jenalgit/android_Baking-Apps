@@ -51,6 +51,9 @@ public class Recipe implements Parcelable {
     @SerializedName("image")
     private String image;
 
+    public Recipe() {
+    }
+
     protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
