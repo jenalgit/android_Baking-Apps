@@ -166,7 +166,7 @@ public class StepActivity extends AppCompatActivity {
                  positionNow, forceExitFullScreen);
         mActivePosition = positionNow;
         mStepIndicator.setText(
-                String.format("%s/%s", (mActivePosition + 1), mData.size()));
+                String.format("%s/%s", mActivePosition, (mData.size() - 1)));
         changeTitle(mData.get(mActivePosition).getShortDescription());
         changeStatusPrevNextButton();
 
