@@ -24,6 +24,7 @@ android:
 
 script:
   - ./gradlew clean lint test
+  - if [[ "$TRAVIS_BRANCH" != "master" ]];then ./gradlew checkstyle; fi
   - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew assembleRelease; fi
 
 # Emulator Management: Create, Start and Wait
