@@ -33,6 +33,8 @@ import com.ngengs.android.baking.apps.data.Recipe;
 import com.ngengs.android.baking.apps.fragments.RecipeFragment;
 import com.ngengs.android.baking.apps.fragments.StepFragment;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -150,7 +152,7 @@ public class RecipeActivity extends AppCompatActivity
         if (!isMultiLayout()) {
             Timber.d("onRecipeStepClick: %s", "click in phone");
             Intent intent = new Intent(this, StepActivity.class);
-            intent.putExtra("DATA", mData);
+            intent.putParcelableArrayListExtra("DATA", new ArrayList<>(mData.getSteps()));
             intent.putExtra("POSITION", position);
             startActivity(intent);
         } else {

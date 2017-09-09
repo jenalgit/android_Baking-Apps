@@ -19,6 +19,7 @@ package com.ngengs.android.baking.apps;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,8 +32,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ngengs.android.baking.apps.data.Recipe;
+import com.ngengs.android.baking.apps.data.Step;
 import com.ngengs.android.baking.apps.fragments.StepFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +56,7 @@ public class StepActivity extends AppCompatActivity {
     View mToolsStep;
 
 
-    private Recipe mData;
+    private List<Step> mData;
     private int mActivePosition;
     private StepFragment mStepFragment;
     private FragmentManager mFragmentManager;
@@ -66,20 +70,23 @@ public class StepActivity extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mActivePosition = 0;
+        mData = new ArrayList<>();
 
         if (mFragmentStepLayout != null) {
             if (savedInstanceState == null) {
                 if (getIntent().getExtras() != null) {
-                    mData = getIntent().getExtras().getParcelable("DATA");
+                    List<Step> temp = getIntent().getExtras().getParcelableArrayList("DATA");
+                    if (temp != null) mData.addAll(temp);
                     mActivePosition = getIntent().getExtras().getInt("POSITION");
                 }
-                mStepFragment = StepFragment.newInstance(mData.getSteps().get(mActivePosition),
+                mStepFragment = StepFragment.newInstance(mData.get(mActivePosition),
                                                          isFullScreen());
                 mFragmentManager.beginTransaction()
                                 .add(mFragmentStepLayout.getId(), mStepFragment)
                                 .commit();
             } else {
-                mData = savedInstanceState.getParcelable("DATA");
+                List<Step> temp = savedInstanceState.getParcelableArrayList("DATA");
+                if (temp != null) mData.addAll(temp);
                 mActivePosition = savedInstanceState.getInt("POSITION");
                 mStepFragment = (StepFragment) mFragmentManager.findFragmentById(
                         mFragmentStepLayout.getId());
@@ -93,7 +100,7 @@ public class StepActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable("DATA", mData);
+        outState.putParcelableArrayList("DATA", new ArrayList<Parcelable>(mData));
         outState.putInt("POSITION", mActivePosition);
         super.onSaveInstanceState(outState);
     }
@@ -113,11 +120,11 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void changeStatusPrevNextButton() {
-        Timber.d("changeStatusPrevNextButton: %s %s", mActivePosition, mData.getSteps().size());
+        Timber.d("changeStatusPrevNextButton: %s %s", mActivePosition, mData.size());
         boolean activePrev = mActivePosition > 0;
         mButtonStepPrev.setClickable(activePrev);
         mButtonStepPrev.setVisibility((activePrev) ? View.VISIBLE : View.INVISIBLE);
-        boolean activeNext = mActivePosition < (mData.getSteps().size() - 1);
+        boolean activeNext = mActivePosition < (mData.size() - 1);
         mButtonStepNext.setClickable(activeNext);
         mButtonStepNext.setVisibility((activeNext) ? View.VISIBLE : View.INVISIBLE);
     }
@@ -129,7 +136,7 @@ public class StepActivity extends AppCompatActivity {
                 if (mActivePosition > 0) changeStep(mActivePosition - 1, false);
                 break;
             case R.id.button_step_next:
-                if (mActivePosition < (mData.getSteps().size() - 1))
+                if (mActivePosition < (mData.size() - 1))
                     changeStep(mActivePosition + 1, false);
                 break;
         }
@@ -149,7 +156,7 @@ public class StepActivity extends AppCompatActivity {
         boolean fullScreen = (!getResources().getBoolean(R.bool.isTablet) &&
                               (getResources().getConfiguration().orientation ==
                                Configuration.ORIENTATION_LANDSCAPE) && !TextUtils.isEmpty(
-                mData.getSteps().get(mActivePosition).getVideoURL()));
+                mData.get(mActivePosition).getVideoURL()));
         Timber.d("isFullScreen() returned: %s", fullScreen);
         return fullScreen;
     }
@@ -159,18 +166,18 @@ public class StepActivity extends AppCompatActivity {
                  positionNow, forceExitFullScreen);
         mActivePosition = positionNow;
         mStepIndicator.setText(
-                String.format("%s/%s", (mActivePosition + 1), mData.getSteps().size()));
-        changeTitle(mData.getSteps().get(mActivePosition).getShortDescription());
+                String.format("%s/%s", (mActivePosition + 1), mData.size()));
+        changeTitle(mData.get(mActivePosition).getShortDescription());
         changeStatusPrevNextButton();
 
         boolean fullScreen = isFullScreen();
         if (forceExitFullScreen) fullScreen = false;
 
-        mStepFragment = StepFragment.newInstance(mData.getSteps().get(mActivePosition), fullScreen);
+        mStepFragment = StepFragment.newInstance(mData.get(mActivePosition), fullScreen);
         mFragmentManager.beginTransaction()
                         .replace(mFragmentStepLayout.getId(), mStepFragment)
                         .commit();
-        if (!TextUtils.isEmpty(mData.getSteps().get(mActivePosition).getVideoURL())) {
+        if (!TextUtils.isEmpty(mData.get(mActivePosition).getVideoURL())) {
             changeLayoutToFullscreen(fullScreen);
         }
     }
