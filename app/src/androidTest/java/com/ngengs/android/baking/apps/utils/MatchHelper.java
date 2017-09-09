@@ -17,7 +17,6 @@
 
 package com.ngengs.android.baking.apps.utils;
 
-import android.support.test.espresso.ViewInteraction;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
@@ -31,12 +30,9 @@ import static org.hamcrest.Matchers.allOf;
 @SuppressWarnings("WeakerAccess")
 public class MatchHelper {
 
-    public static ViewInteraction matchToolbarTitle(
+    public static void matchToolbarTitle(
             CharSequence title) {
-        return onView(
-                allOf(
-                        isAssignableFrom(TextView.class),
-                        withParent(isAssignableFrom(Toolbar.class))))
+        onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
                 .check(matches(withText(title.toString())));
     }
 }

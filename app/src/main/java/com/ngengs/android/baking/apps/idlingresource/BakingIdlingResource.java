@@ -15,7 +15,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.ngengs.android.baking.apps.IdlingResource;
+package com.ngengs.android.baking.apps.idlingresource;
 
 import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
@@ -44,6 +44,12 @@ public class BakingIdlingResource implements IdlingResource {
         mCallback = callback;
     }
 
+    /**
+     * Change status of idling resource.
+     *
+     * @param isIdleNow
+     *         idling resource new status
+     */
     public void setIdleState(boolean isIdleNow) {
         mIsIdleNow.set(isIdleNow);
         if (isIdleNow && mCallback != null) {

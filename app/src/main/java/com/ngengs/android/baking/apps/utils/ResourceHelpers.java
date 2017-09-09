@@ -24,6 +24,16 @@ import android.support.v7.widget.AppCompatDrawableManager;
 
 @SuppressWarnings("unused")
 public class ResourceHelpers {
+    /**
+     * Helper to get color in several API level.
+     *
+     * @param context
+     *         Activity or application context
+     * @param colorId
+     *         Resource id of color
+     *
+     * @return color
+     */
     public static int getColor(Context context, int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return context.getResources().getColor(colorId, null);
@@ -33,6 +43,16 @@ public class ResourceHelpers {
         }
     }
 
+    /**
+     * Helper to get vector drawable in several API level.
+     *
+     * @param context
+     *         Activity or application context
+     * @param drawableId
+     *         Resource id of drawable
+     *
+     * @return vector drawable
+     */
     public static Drawable getDrawable(Context context, int drawableId) {
         Drawable placeholder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

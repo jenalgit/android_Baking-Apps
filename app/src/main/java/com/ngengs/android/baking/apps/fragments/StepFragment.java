@@ -68,6 +68,16 @@ public class StepFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Call or build the Step fragment with given params.
+     *
+     * @param step
+     *         The step data to display
+     * @param fullScreen
+     *         If we need make full screnn layout
+     *
+     * @return The instance fragment
+     */
     public static StepFragment newInstance(Step step, boolean fullScreen) {
         StepFragment fragment = new StepFragment();
         Bundle args = new Bundle();
@@ -97,10 +107,11 @@ public class StepFragment extends Fragment {
         if (savedInstanceState != null) {
             mData = savedInstanceState.getParcelable("DATA");
         }
-        if (mStepDescription != null && mData != null)
+        if (mStepDescription != null && mData != null) {
             mStepDescription.setText(mData.getDescription());
-        if (mStepImageThumbnail != null && mData != null &&
-            !TextUtils.isEmpty(mData.getThumbnailURL())) {
+        }
+        if (mStepImageThumbnail != null && mData != null
+            && !TextUtils.isEmpty(mData.getThumbnailURL())) {
             mStepImageThumbnail.setVisibility(View.VISIBLE);
             Glide.with(this)
                  .load(mData.getThumbnailURL())
@@ -149,6 +160,9 @@ public class StepFragment extends Fragment {
         return mFullScreen;
     }
 
+    /**
+     * Destroy or release video player when not need again.
+     */
     public void releasePlayer() {
         if (mExoPlayer != null) {
             mExoPlayer.stop();

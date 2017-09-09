@@ -45,6 +45,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     private final Context mContext;
     private final OnClickListener mClickListener;
 
+    /**
+     * Recycler View adapter for recipes list.
+     *
+     * @param mContext
+     *         Application or activity context
+     * @param mClickListener
+     *         Item click listener
+     */
     public RecipesAdapter(Context mContext, OnClickListener mClickListener) {
         this.mContext = mContext;
         this.mData = new ArrayList<>();
@@ -84,6 +92,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         return mData.size();
     }
 
+    /**
+     * Insert list of new data to adapter.
+     *
+     * @param data
+     *         Recipes list
+     */
     public void addData(List<Recipe> data) {
         if (data != null) {
             int position = mData.size();

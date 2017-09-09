@@ -45,6 +45,14 @@ public class Connection {
     private static final int WRITE_TIMEOUT = 300;
     private static final int TIMEOUT = 300;
 
+    /**
+     * Build okHttp client.
+     *
+     * @param application
+     *         The application of activity
+     *
+     * @return okHttp client
+     */
     public static OkHttpClient provideOkHttp(Application application) {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
                 new HttpLoggingInterceptor.Logger() {
@@ -68,7 +76,14 @@ public class Connection {
                 .build();
     }
 
-
+    /**
+     * Build retrofit client.
+     *
+     * @param okHttpClient
+     *         okHttp configured client.
+     *
+     * @return retrofit client
+     */
     public static Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(Connection.BASE_URL)
@@ -78,6 +93,14 @@ public class Connection {
     }
 
 
+    /**
+     * Build BakingAPI client.
+     *
+     * @param application
+     *         The application of activity
+     *
+     * @return BakingAPI client from retrofit.
+     */
     public static BakingAPI build(Application application) {
         return provideRetrofit(provideOkHttp(application)).create(BakingAPI.class);
     }

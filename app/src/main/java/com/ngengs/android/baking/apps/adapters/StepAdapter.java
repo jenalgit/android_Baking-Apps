@@ -45,6 +45,16 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     private final StepAdapter.OnClickListener mClickListener;
     private int selectedPosition;
 
+    /**
+     * Recycler View adapter for steps list.
+     *
+     * @param mContext
+     *         Application or activity context
+     * @param mData
+     *         List of Step for adapter
+     * @param mClickListener
+     *         Item click listener
+     */
     public StepAdapter(Context mContext, List<Step> mData,
                        StepAdapter.OnClickListener mClickListener) {
         this.mContext = mContext;
@@ -90,12 +100,22 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
         Glide.with(mContext).asBitmap().load(imageUrl).thumbnail(0.05f).into(imageView);
     }
 
+    /**
+     * Give selected indicator to the item in adapter.
+     *
+     * @param newPosition
+     *         Position to give indicator, old indicator will be released.
+     */
     public void indicatorSelected(int newPosition) {
         Timber.d("indicatorSelected() called with: newPosition = [%s]", newPosition);
         int temp = selectedPosition;
         selectedPosition = newPosition;
-        if (temp >= 0) notifyItemChanged(temp);
-        if (selectedPosition >= 0) notifyItemChanged(selectedPosition);
+        if (temp >= 0) {
+            notifyItemChanged(temp);
+        }
+        if (selectedPosition >= 0) {
+            notifyItemChanged(selectedPosition);
+        }
     }
 
     public interface OnClickListener {

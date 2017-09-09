@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 public class StepActivityTest {
     private static final int STEP_COUNT = 3;
     private static final int START_POSITION = 1;
-    private List<Step> stepData = DataHelper.buildSteps(STEP_COUNT);
+    private final List<Step> stepData = DataHelper.buildSteps(STEP_COUNT);
     @Rule
     public ActivityTestRule<StepActivity> stepActivityActivityTestRule
             = new ActivityTestRule<StepActivity>(
