@@ -1,5 +1,8 @@
 <component name="CopyrightManager">
-  <settings default="RizkyKharismaCopyrightPublic">
+  <settings default="RizkyKharismaCopyrightPublicMIT">
+    <module2copyright>
+      <element module="All" copyright="RizkyKharismaCopyrightPublicMIT" />
+    </module2copyright>
     <LanguageOptions name="Groovy">
       <option name="fileTypeOverride" value="3" />
       <option name="separateBefore" value="true" />
