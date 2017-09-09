@@ -100,7 +100,9 @@ public class RecipeActivity extends AppCompatActivity
         if (mData != null) {
             setTitle(mData.getName());
         }
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         if (isMultiLayout()) {
             Timber.d("onCreate: %s", "create multi layout");
             mOpenMultiLayout = (savedInstanceState != null) && savedInstanceState.getBoolean(
@@ -117,8 +119,8 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     private boolean isMultiLayout() {
-        return mFragmentStepLayout != null && mConstraintLayoutRoot != null && mGuideline != null &&
-               getResources().getBoolean(R.bool.isTablet);
+        return mFragmentStepLayout != null && mConstraintLayoutRoot != null && mGuideline != null
+               && getResources().getBoolean(R.bool.isTablet);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -131,8 +133,8 @@ public class RecipeActivity extends AppCompatActivity
                 params.guidePercent = 1f;
             } else {
                 mFragmentStepLayout.setVisibility(View.VISIBLE);
-                params.guidePercent = (getResources().getConfiguration().orientation ==
-                                       Configuration.ORIENTATION_LANDSCAPE) ? 0.35f : 0.5f;
+                params.guidePercent = (getResources().getConfiguration().orientation
+                                       == Configuration.ORIENTATION_LANDSCAPE) ? 0.35f : 0.5f;
             }
             mGuideline.setLayoutParams(params);
         }
@@ -140,7 +142,9 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) onBackPressed();
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -162,12 +166,15 @@ public class RecipeActivity extends AppCompatActivity
             if (mStepFragment != null) {
                 StepFragment temp = (StepFragment) mFragmentManager.findFragmentById(
                         mFragmentStepLayout.getId());
-                if (temp.getStepId() == mData.getSteps().get(position).getId())
+                if (temp.getStepId() == mData.getSteps().get(position).getId()) {
                     changeFragment = false;
+                }
             }
             if (changeFragment) {
                 Timber.d("onRecipeStepClick: %s", "click on tablet and change fragment");
-                if (mRecipeFragment != null) mRecipeFragment.changeSelectedStep(position);
+                if (mRecipeFragment != null) {
+                    mRecipeFragment.changeSelectedStep(position);
+                }
                 mStepFragment = StepFragment.newInstance(mData.getSteps().get(position), false);
                 mFragmentManager.beginTransaction()
                                 .replace(mFragmentStepLayout.getId(), mStepFragment)
@@ -182,12 +189,17 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (!isMultiLayout()) super.onBackPressed();
-        else {
+        if (!isMultiLayout()) {
+            super.onBackPressed();
+        } else {
             if (mOpenMultiLayout) {
                 Timber.d("onBackPressed: %s", "close the detail step");
-                if (mRecipeFragment != null) mRecipeFragment.changeSelectedStep(-1);
-                if (mStepFragment != null) mStepFragment.releasePlayer();
+                if (mRecipeFragment != null) {
+                    mRecipeFragment.changeSelectedStep(-1);
+                }
+                if (mStepFragment != null) {
+                    mStepFragment.releasePlayer();
+                }
                 mOpenMultiLayout = false;
                 changeMultiLayout();
             } else {

@@ -61,6 +61,16 @@ public class RecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Call or build the Recipe fragment with given params.
+     *
+     * @param ingredients
+     *         List of ingredient
+     * @param steps
+     *         List of steps
+     *
+     * @return The instance fragment
+     */
     public static RecipeFragment newInstance(List<Ingredient> ingredients, List<Step> steps) {
         RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
@@ -90,8 +100,12 @@ public class RecipeFragment extends Fragment {
             List<Ingredient> tempIngredients = getArguments().getParcelableArrayList(
                     ARG_PARAM_INGREDIENT);
             List<Step> tempSteps = getArguments().getParcelableArrayList(ARG_PARAM_STEP);
-            if (tempIngredients != null) mIngredientList.addAll(tempIngredients);
-            if (tempSteps != null) mStepList.addAll(tempSteps);
+            if (tempIngredients != null) {
+                mIngredientList.addAll(tempIngredients);
+            }
+            if (tempSteps != null) {
+                mStepList.addAll(tempSteps);
+            }
         }
     }
 
@@ -110,15 +124,14 @@ public class RecipeFragment extends Fragment {
         mRecyclerIngredient.setAdapter(new IngredientAdapter(mIngredientList));
         mRecyclerStep.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerStep.setHasFixedSize(true);
-        mStepAdapter = new StepAdapter(getContext(), mStepList,
-                                       new StepAdapter.OnClickListener() {
-                                           @Override
-                                           public void onClickStep(int position) {
-                                               if (mListener != null) {
-                                                   mListener.onRecipeStepClick(position);
-                                               }
-                                           }
-                                       });
+        mStepAdapter = new StepAdapter(getContext(), mStepList, new StepAdapter.OnClickListener() {
+            @Override
+            public void onClickStep(int position) {
+                if (mListener != null) {
+                    mListener.onRecipeStepClick(position);
+                }
+            }
+        });
         mRecyclerStep.setAdapter(mStepAdapter);
         ViewCompat.setNestedScrollingEnabled(mRecyclerIngredient, false);
         ViewCompat.setNestedScrollingEnabled(mRecyclerStep, false);
@@ -144,6 +157,12 @@ public class RecipeFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Give indicator to the selected step.
+     *
+     * @param position
+     *         Position of the indicator
+     */
     public void changeSelectedStep(int position) {
         if (mStepAdapter != null && mStepAdapter.getItemCount() >= position) {
             mStepAdapter.indicatorSelected(position);
@@ -155,10 +174,9 @@ public class RecipeFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
+     * <p>* See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * >Communicating with Other Fragments</a> for more information.</p>
      */
     public interface OnFragmentInteractionListener {
         void onRecipeStepClick(int position);

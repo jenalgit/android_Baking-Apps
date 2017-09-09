@@ -37,10 +37,10 @@ import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
-import com.ngengs.android.baking.apps.IdlingResource.BakingIdlingResource;
 import com.ngengs.android.baking.apps.adapters.RecipesAdapter;
 import com.ngengs.android.baking.apps.data.Ingredient;
 import com.ngengs.android.baking.apps.data.Recipe;
+import com.ngengs.android.baking.apps.idlingresource.BakingIdlingResource;
 import com.ngengs.android.baking.apps.remotes.Connection;
 import com.ngengs.android.baking.apps.utils.ResourceHelpers;
 import com.ngengs.android.baking.apps.widget.ListRemoteViewsService;
@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
                     Timber.d("onClick: %s. Widget Id: %s", "Finishing widget configuration",
                              mAppWidgetId);
                     Context mContext = getApplicationContext();
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
                     RemoteViews views = new RemoteViews(getBaseContext().getPackageName(),
                                                         R.layout.widget_configured);
                     views.setTextViewText(R.id.widget_title, recipe.getName());
@@ -111,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
                     ingredientWidgetListIntent.putStringArrayListExtra("QUANTITY",
                                                                        dataIngredientQuantity);
                     views.setRemoteAdapter(R.id.widget_list, ingredientWidgetListIntent);
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
                     appWidgetManager.updateAppWidget(mAppWidgetId, views);
                     Intent intentWidget = new Intent();
                     intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
         mRecyclerRecipes.setHasFixedSize(true);
         int gridSpan;
         if (getResources().getBoolean(R.bool.isTablet)) {
-            gridSpan = (getResources().getConfiguration().orientation ==
-                        Configuration.ORIENTATION_LANDSCAPE) ? 3 : 2;
+            gridSpan = (getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_LANDSCAPE) ? 3 : 2;
         } else {
-            gridSpan = (getResources().getConfiguration().orientation ==
-                        Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
+            gridSpan = (getResources().getConfiguration().orientation
+                        == Configuration.ORIENTATION_LANDSCAPE) ? 2 : 1;
         }
 
         mRecyclerRecipes.setLayoutManager(new GridLayoutManager(this, gridSpan));
@@ -169,8 +169,9 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
                 if (mIdlingResource != null) {
                     mIdlingResource.setIdleState(true);
                 }
+            } else {
+                loadDataFromRemote();
             }
-            else loadDataFromRemote();
         } else {
             Timber.w("loadDataFromSavedInstanceState: %s",
                      "Data from saved instance state is null");
@@ -229,7 +230,8 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
 
 
     /**
-     * Only called from test, creates and returns a new {@link com.ngengs.android.baking.apps.IdlingResource.BakingIdlingResource}.
+     * Only called from test, creates and returns a new
+     * {@link com.ngengs.android.baking.apps.idlingresource.BakingIdlingResource}.
      */
     @VisibleForTesting
     @NonNull
