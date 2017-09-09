@@ -46,7 +46,7 @@ import android.widget.TextView;
 import com.ngengs.android.baking.apps.adapters.RecipesAdapter;
 import com.ngengs.android.baking.apps.data.Ingredient;
 import com.ngengs.android.baking.apps.data.Recipe;
-import com.ngengs.android.baking.apps.idlingresource.BakingIdlingResource;
+import com.ngengs.android.baking.apps.idlingresources.BakingIdlingResource;
 import com.ngengs.android.baking.apps.remotes.Connection;
 import com.ngengs.android.baking.apps.utils.ResourceHelpers;
 import com.ngengs.android.baking.apps.widget.ListRemoteViewsService;
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
 
     /**
      * Only called from test, creates and returns a new
-     * {@link com.ngengs.android.baking.apps.idlingresource.BakingIdlingResource}.
+     * {@link BakingIdlingResource}.
      */
     @VisibleForTesting
     @NonNull

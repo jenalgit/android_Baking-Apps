@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package com.ngengs.android.baking.apps.idlingresource;
+package com.ngengs.android.baking.apps.idlingresources;
 
 import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
