@@ -126,11 +126,9 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1', {
+    androidTestCompile('com.schibsted.spain:barista:1.7.0', {
         exclude group: 'com.android.support'
-    })
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:3.0.1', {
-        exclude group: 'com.android.support'
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-idling-resource'
     })
     // AndroidJUnitRunner and JUnit Rules
     androidTestCompile('com.android.support.test:runner:1.0.1', {

@@ -17,18 +17,14 @@
 
 package com.ngengs.android.baking.apps;
 
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.schibsted.spain.barista.BaristaAssertions;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityStartTest {
@@ -41,14 +37,14 @@ public class MainActivityStartTest {
 
     @Test
     public void testRecyclerRecipe_Hidden() {
-        onView(ViewMatchers.withId(R.id.recyclerRecipes)).check(matches(not(isDisplayed())));
+        BaristaAssertions.assertNotDisplayed(R.id.recyclerRecipes);
     }
 
     @Test
     public void testPromptLayout_Displayed() {
-        onView(ViewMatchers.withId(R.id.prompt_layout)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.prompt_image)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.prompt_text)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.prompt_progress)).check(matches(isDisplayed()));
+        BaristaAssertions.assertDisplayed(R.id.prompt_layout);
+        BaristaAssertions.assertDisplayed(R.id.prompt_image);
+        BaristaAssertions.assertDisplayed(R.id.prompt_text);
+        BaristaAssertions.assertDisplayed(R.id.prompt_progress);
     }
 }
