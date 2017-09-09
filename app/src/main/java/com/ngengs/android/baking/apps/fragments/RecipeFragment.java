@@ -2,17 +2,23 @@
  * Copyright (c) 2017 Rizky Kharisma (@ngengs)
  *
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  ******************************************************************************/
 
 package com.ngengs.android.baking.apps.fragments;
@@ -52,6 +58,7 @@ public class RecipeFragment extends Fragment {
 
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
+    private StepAdapter mStepAdapter;
 
 
     private OnFragmentInteractionListener mListener;
@@ -60,6 +67,16 @@ public class RecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Call or build the Recipe fragment with given params.
+     *
+     * @param ingredients
+     *         List of ingredient
+     * @param steps
+     *         List of steps
+     *
+     * @return The instance fragment
+     */
     public static RecipeFragment newInstance(List<Ingredient> ingredients, List<Step> steps) {
         RecipeFragment fragment = new RecipeFragment();
         Bundle args = new Bundle();
@@ -89,8 +106,12 @@ public class RecipeFragment extends Fragment {
             List<Ingredient> tempIngredients = getArguments().getParcelableArrayList(
                     ARG_PARAM_INGREDIENT);
             List<Step> tempSteps = getArguments().getParcelableArrayList(ARG_PARAM_STEP);
-            if (tempIngredients != null) mIngredientList.addAll(tempIngredients);
-            if (tempSteps != null) mStepList.addAll(tempSteps);
+            if (tempIngredients != null) {
+                mIngredientList.addAll(tempIngredients);
+            }
+            if (tempSteps != null) {
+                mStepList.addAll(tempSteps);
+            }
         }
     }
 
@@ -109,15 +130,15 @@ public class RecipeFragment extends Fragment {
         mRecyclerIngredient.setAdapter(new IngredientAdapter(mIngredientList));
         mRecyclerStep.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerStep.setHasFixedSize(true);
-        mRecyclerStep.setAdapter(new StepAdapter(getContext(), mStepList,
-                                                 new StepAdapter.OnClickListener() {
-                                                     @Override
-                                                     public void onClickStep(int position) {
-                                                         if (mListener != null) {
-                                                             mListener.onRecipeStepClick(position);
-                                                         }
-                                                     }
-                                                 }));
+        mStepAdapter = new StepAdapter(getContext(), mStepList, new StepAdapter.OnClickListener() {
+            @Override
+            public void onClickStep(int position) {
+                if (mListener != null) {
+                    mListener.onRecipeStepClick(position);
+                }
+            }
+        });
+        mRecyclerStep.setAdapter(mStepAdapter);
         ViewCompat.setNestedScrollingEnabled(mRecyclerIngredient, false);
         ViewCompat.setNestedScrollingEnabled(mRecyclerStep, false);
         return view;
@@ -143,14 +164,25 @@ public class RecipeFragment extends Fragment {
     }
 
     /**
+     * Give indicator to the selected step.
+     *
+     * @param position
+     *         Position of the indicator
+     */
+    public void changeSelectedStep(int position) {
+        if (mStepAdapter != null && mStepAdapter.getItemCount() >= position) {
+            mStepAdapter.indicatorSelected(position);
+        }
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
+     * <p>* See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * >Communicating with Other Fragments</a> for more information.</p>
      */
     public interface OnFragmentInteractionListener {
         void onRecipeStepClick(int position);

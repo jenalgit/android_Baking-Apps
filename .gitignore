@@ -10,3 +10,4 @@
 /keystore.properties
 /app/keystore/*.jks
 /app/fabric.properties
+/configuration-release.tar
