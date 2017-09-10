@@ -186,8 +186,8 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private void changeStep(int positionNow, boolean forceExitFullScreen, boolean fromStart) {
-        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s], " +
-                 "fromStart = [%s]", positionNow, forceExitFullScreen, fromStart);
+        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s], "
+                 + "fromStart = [%s]", positionNow, forceExitFullScreen, fromStart);
         mActivePosition = positionNow;
         mStepIndicator.setText(
                 String.format("%s/%s", mActivePosition, (mData.size() - 1)));

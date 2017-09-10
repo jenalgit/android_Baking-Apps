@@ -105,11 +105,11 @@ public class StepFragment extends Fragment {
      * @return The instance fragment
      */
     public static StepFragment newInstance(Step step, boolean fullScreen, long videoPositionStart) {
-        StepFragment fragment = new StepFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP_DATA, step);
         args.putBoolean(ARG_STEP_FULLSCREEN, fullScreen);
         args.putLong(ARG_STEP_VIDEO_POSITION, videoPositionStart);
+        StepFragment fragment = new StepFragment();
         fragment.setArguments(args);
         return fragment;
     }
