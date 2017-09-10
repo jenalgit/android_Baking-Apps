@@ -1,4 +1,4 @@
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) 2017 Rizky Kharisma (@ngengs)
   ~
   ~
@@ -21,12 +21,6 @@
   ~ THE SOFTWARE.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportHeight="24.0"
-    android:viewportWidth="24.0">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M6,18l8.5,-6L6,6v12zM16,6v12h2V6h-2z" />
-</vector>
+<resources>
+    <dimen name="player_size">500dp</dimen>
+</resources>

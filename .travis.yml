@@ -24,6 +24,7 @@ android:
 
 script:
   - ./gradlew clean lint test
+  - if [[ "$TRAVIS_BRANCH" != "master" ]];then ./gradlew checkstyle; fi
   - if [[ "$TRAVIS_BRANCH" == "master" ]];then ./gradlew assembleRelease; fi
 
 # Emulator Management: Create, Start and Wait
@@ -43,7 +44,7 @@ deploy:
   api_key:
     secure: O7okXVtzoIdKRPKCFEeVftRZm7qYTzo0TxTIirExbcqmfCAtvirpqcdaF54+gwpKW5rRLwbXfYGiDSqsJ7QN+5X/iDB5gC/WwqcLVgLjR5OOfxjnBmzy2PYQC9phu1a4KRrThHKATy4hJInsMflCEZqcxknTyjP7KQl1H7YOC0eJioImS2qY10JbSEtSFk+pSkgUijCHlBjHO1XZZr4HD9VVw8wk897Ncx/h987q/NBICOgw5GuRau8kXvS3rbzao+OBTAQAHMLREoeRQ+2qXTLb19w3KTfDhoR3HAuUpLa/lGbUX80WGFrW8XvC7gJeTFhul1GNLdMbLKwZ0cH8tJl2YIHPxUOmdvolMGyNQM5T++4is6LTE3gmIGSwpRGfe1PjP9qV+WMhmYLs40Kr7tTYRK1RbYHQFKoRu32Uxzzx2CHOz/LStSzaSzcKFpIIJwWrjQYDTBpfAvk+EKw9qHMmDJVNrDbmyZudSlMFqLrDoyrHSKrsbhp1oX4V5BhqmesM5t8K8mM2H1UyW4o8O6Un87keouYouVjVIEGdermw/DzstHflVRlqeqvc5Hrmw2DYWwqtbZVCqzu4XnvjOEAm9ClrXN1lqbVFrBeWcV9VEsyneolNokV2U7LEJ7BXKnhNx9K+n2U1qATvmDG6AwWlDSypSi22x9L85jxuxok=
   file_glob: true
-  file: app/build/output/*-release.apk
+  file: "app/build/outputs/apk/*-release.apk"
   skip_cleanup: true
   on:
     repo: ngengs/android_Baking-Apps

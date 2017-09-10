@@ -21,19 +21,45 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
-package com.ngengs.android.baking.apps.utils;
+package com.ngengs.android.baking.apps.idlingresources;
 
+import android.support.annotation.Nullable;
+import android.support.test.espresso.IdlingResource;
 
-import android.app.Activity;
-import android.util.DisplayMetrics;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class DeviceHelper {
-    public static boolean isTablet(Activity mActivity) {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        mActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float widthDp = displayMetrics.widthPixels / displayMetrics.density;
-        float heightDp = displayMetrics.heightPixels / displayMetrics.density;
-        float screenSw = Math.min(widthDp, heightDp);
-        return screenSw >= 600;
+public class BakingIdlingResource implements IdlingResource {
+
+    @Nullable
+    private ResourceCallback mCallback;
+
+    private AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
+
+    @Override
+    public String getName() {
+        return this.getClass().getName();
+    }
+
+    @Override
+    public boolean isIdleNow() {
+        return mIsIdleNow.get();
+    }
+
+    @Override
+    public void registerIdleTransitionCallback(ResourceCallback callback) {
+        mCallback = callback;
+    }
+
+    /**
+     * Change status of idling resource.
+     *
+     * @param isIdleNow
+     *         idling resource new status
+     */
+    public void setIdleState(boolean isIdleNow) {
+        mIsIdleNow.set(isIdleNow);
+        if (isIdleNow && mCallback != null) {
+            mCallback.onTransitionToIdle();
+        }
     }
 }

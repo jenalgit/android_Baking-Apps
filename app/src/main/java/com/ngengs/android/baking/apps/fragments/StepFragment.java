@@ -2,17 +2,23 @@
  * Copyright (c) 2017 Rizky Kharisma (@ngengs)
  *
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  ******************************************************************************/
 
 package com.ngengs.android.baking.apps.fragments;
@@ -30,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -50,6 +57,7 @@ import butterknife.Unbinder;
 public class StepFragment extends Fragment {
     private static final String ARG_STEP_DATA = "PARAM_STEP";
     private static final String ARG_STEP_FULLSCREEN = "PARAM_FULL";
+    private static final String ARG_STEP_VIDEO_POSITION = "PARAM_VIDEO_POSITION";
     @BindView(R.id.step_video_player)
     SimpleExoPlayerView mStepExoPlayerView;
     @Nullable
@@ -63,16 +71,45 @@ public class StepFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private Step mData;
     private boolean mFullScreen;
+    private long mVideoLastPosition;
+    private boolean mVideoPlayed;
 
     public StepFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Call or build the Step fragment with given params.
+     *
+     * @param step
+     *         The step data to display
+     * @param fullScreen
+     *         If we need make full screnn layout
+     *
+     * @return The instance fragment
+     */
     public static StepFragment newInstance(Step step, boolean fullScreen) {
-        StepFragment fragment = new StepFragment();
+        return newInstance(step, fullScreen, C.TIME_UNSET);
+    }
+
+    /**
+     * Call or build the Step fragment with given params.
+     *
+     * @param step
+     *         The step data to display
+     * @param fullScreen
+     *         If we need make full screnn layout
+     * @param videoPositionStart
+     *         Video start position
+     *
+     * @return The instance fragment
+     */
+    public static StepFragment newInstance(Step step, boolean fullScreen, long videoPositionStart) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP_DATA, step);
         args.putBoolean(ARG_STEP_FULLSCREEN, fullScreen);
+        args.putLong(ARG_STEP_VIDEO_POSITION, videoPositionStart);
+        StepFragment fragment = new StepFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,13 +131,18 @@ public class StepFragment extends Fragment {
                 (mFullScreen ? R.layout.fragment_step_fullscreen : R.layout.fragment_step),
                 container, false);
         unbinder = ButterKnife.bind(this, view);
+        mVideoLastPosition = C.TIME_UNSET;
+        mVideoPlayed = true;
         if (savedInstanceState != null) {
             mData = savedInstanceState.getParcelable("DATA");
+            mVideoLastPosition = savedInstanceState.getLong("PLAYER_POSITION", C.TIME_UNSET);
+            mVideoPlayed = savedInstanceState.getBoolean("PLAYER_STATUS", true);
         }
-        if (mStepDescription != null && mData != null)
+        if (mStepDescription != null && mData != null) {
             mStepDescription.setText(mData.getDescription());
-        if (mStepImageThumbnail != null && mData != null &&
-            !TextUtils.isEmpty(mData.getThumbnailURL())) {
+        }
+        if (mStepImageThumbnail != null && mData != null
+            && !TextUtils.isEmpty(mData.getThumbnailURL())) {
             mStepImageThumbnail.setVisibility(View.VISIBLE);
             Glide.with(this)
                  .load(mData.getThumbnailURL())
@@ -117,7 +159,21 @@ public class StepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("DATA", mData);
+        outState.putLong("PLAYER_POSITION", mVideoLastPosition);
+        outState.putBoolean("PLAYER_STATUS", mVideoPlayed);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
     }
 
     @Override
@@ -141,7 +197,8 @@ public class StepFragment extends Fragment {
                                                                new DefaultExtractorsFactory(), null,
                                                                null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.seekTo(mVideoLastPosition);
+            mExoPlayer.setPlayWhenReady(mVideoPlayed);
         }
     }
 
@@ -149,8 +206,17 @@ public class StepFragment extends Fragment {
         return mFullScreen;
     }
 
+    public void setFullScreen(boolean fullScreen) {
+        mFullScreen = fullScreen;
+    }
+
+    /**
+     * Destroy or release video player when not need again.
+     */
     public void releasePlayer() {
         if (mExoPlayer != null) {
+            mVideoLastPosition = mExoPlayer.getCurrentPosition();
+            mVideoPlayed = mExoPlayer.getPlayWhenReady();
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;

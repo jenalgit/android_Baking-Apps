@@ -2,17 +2,23 @@
  * Copyright (c) 2017 Rizky Kharisma (@ngengs)
  *
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  ******************************************************************************/
 
 package com.ngengs.android.baking.apps;
@@ -76,7 +82,9 @@ public class StepActivity extends AppCompatActivity {
             if (savedInstanceState == null) {
                 if (getIntent().getExtras() != null) {
                     List<Step> temp = getIntent().getExtras().getParcelableArrayList("DATA");
-                    if (temp != null) mData.addAll(temp);
+                    if (temp != null) {
+                        mData.addAll(temp);
+                    }
                     mActivePosition = getIntent().getExtras().getInt("POSITION");
                 }
                 mStepFragment = StepFragment.newInstance(mData.get(mActivePosition),
@@ -86,16 +94,21 @@ public class StepActivity extends AppCompatActivity {
                                 .commit();
             } else {
                 List<Step> temp = savedInstanceState.getParcelableArrayList("DATA");
-                if (temp != null) mData.addAll(temp);
+                if (temp != null) {
+                    mData.addAll(temp);
+                }
                 mActivePosition = savedInstanceState.getInt("POSITION");
                 mStepFragment = (StepFragment) mFragmentManager.findFragmentById(
                         mFragmentStepLayout.getId());
+                mStepFragment.setFullScreen(isFullScreen());
             }
         }
 
         changeStatusPrevNextButton();
-        changeStep(mActivePosition, false);
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        changeStep(mActivePosition, false, true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -110,11 +123,15 @@ public class StepActivity extends AppCompatActivity {
             Timber.d("changeLayoutToFullscreen: %s", "landscape");
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                                  WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            if (getSupportActionBar() != null) getSupportActionBar().hide();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
         } else {
             Timber.d("changeLayoutToFullscreen: %s", "portrait");
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            if (getSupportActionBar() != null) getSupportActionBar().show();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
+            }
         }
         mToolsStep.setVisibility(fullScreen ? View.GONE : View.VISIBLE);
     }
@@ -133,18 +150,25 @@ public class StepActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button_step_prev:
-                if (mActivePosition > 0) changeStep(mActivePosition - 1, false);
+                if (mActivePosition > 0) {
+                    changeStep(mActivePosition - 1, false, false);
+                }
                 break;
             case R.id.button_step_next:
-                if (mActivePosition < (mData.size() - 1))
-                    changeStep(mActivePosition + 1, false);
+                if (mActivePosition < (mData.size() - 1)) {
+                    changeStep(mActivePosition + 1, false, false);
+                }
                 break;
+            default:
+                Timber.e("onViewClicked: %s", "The view id in clicked view is not known");
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) onBackPressed();
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -153,30 +177,31 @@ public class StepActivity extends AppCompatActivity {
     }
 
     private boolean isFullScreen() {
-        boolean fullScreen = (!getResources().getBoolean(R.bool.isTablet) &&
-                              (getResources().getConfiguration().orientation ==
-                               Configuration.ORIENTATION_LANDSCAPE) && !TextUtils.isEmpty(
-                mData.get(mActivePosition).getVideoURL()));
+        boolean fullScreen = (!getResources().getBoolean(R.bool.isTablet)
+                              && (getResources().getConfiguration().orientation
+                                  == Configuration.ORIENTATION_LANDSCAPE)
+                              && !TextUtils.isEmpty(mData.get(mActivePosition).getVideoURL()));
         Timber.d("isFullScreen() returned: %s", fullScreen);
         return fullScreen;
     }
 
-    private void changeStep(int positionNow, boolean forceExitFullScreen) {
-        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s]",
-                 positionNow, forceExitFullScreen);
+    private void changeStep(int positionNow, boolean forceExitFullScreen, boolean fromStart) {
+        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s], "
+                 + "fromStart = [%s]", positionNow, forceExitFullScreen, fromStart);
         mActivePosition = positionNow;
         mStepIndicator.setText(
                 String.format("%s/%s", mActivePosition, (mData.size() - 1)));
         changeTitle(mData.get(mActivePosition).getShortDescription());
         changeStatusPrevNextButton();
 
-        boolean fullScreen = isFullScreen();
-        if (forceExitFullScreen) fullScreen = false;
+        boolean fullScreen = !forceExitFullScreen && isFullScreen();
 
-        mStepFragment = StepFragment.newInstance(mData.get(mActivePosition), fullScreen);
-        mFragmentManager.beginTransaction()
-                        .replace(mFragmentStepLayout.getId(), mStepFragment)
-                        .commit();
+        if (!fromStart) {
+            mStepFragment = StepFragment.newInstance(mData.get(mActivePosition), fullScreen);
+            mFragmentManager.beginTransaction()
+                            .replace(mFragmentStepLayout.getId(), mStepFragment)
+                            .commit();
+        }
         if (!TextUtils.isEmpty(mData.get(mActivePosition).getVideoURL())) {
             changeLayoutToFullscreen(fullScreen);
         }
@@ -185,7 +210,7 @@ public class StepActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isFullScreen() && mStepFragment.isFullScreen()) {
-            changeStep(mActivePosition, true);
+            changeStep(mActivePosition, true, false);
         } else {
             super.onBackPressed();
         }
