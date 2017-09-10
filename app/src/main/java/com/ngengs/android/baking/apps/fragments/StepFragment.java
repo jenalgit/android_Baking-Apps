@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -56,6 +57,7 @@ import butterknife.Unbinder;
 public class StepFragment extends Fragment {
     private static final String ARG_STEP_DATA = "PARAM_STEP";
     private static final String ARG_STEP_FULLSCREEN = "PARAM_FULL";
+    private static final String ARG_STEP_VIDEO_POSITION = "PARAM_VIDEO_POSITION";
     @BindView(R.id.step_video_player)
     SimpleExoPlayerView mStepExoPlayerView;
     @Nullable
@@ -69,6 +71,8 @@ public class StepFragment extends Fragment {
     private SimpleExoPlayer mExoPlayer;
     private Step mData;
     private boolean mFullScreen;
+    private long mVideoLastPosition;
+    private boolean mVideoPlayed;
 
     public StepFragment() {
         // Required empty public constructor
@@ -85,10 +89,27 @@ public class StepFragment extends Fragment {
      * @return The instance fragment
      */
     public static StepFragment newInstance(Step step, boolean fullScreen) {
-        StepFragment fragment = new StepFragment();
+        return newInstance(step, fullScreen, C.TIME_UNSET);
+    }
+
+    /**
+     * Call or build the Step fragment with given params.
+     *
+     * @param step
+     *         The step data to display
+     * @param fullScreen
+     *         If we need make full screnn layout
+     * @param videoPositionStart
+     *         Video start position
+     *
+     * @return The instance fragment
+     */
+    public static StepFragment newInstance(Step step, boolean fullScreen, long videoPositionStart) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP_DATA, step);
         args.putBoolean(ARG_STEP_FULLSCREEN, fullScreen);
+        args.putLong(ARG_STEP_VIDEO_POSITION, videoPositionStart);
+        StepFragment fragment = new StepFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -110,8 +131,12 @@ public class StepFragment extends Fragment {
                 (mFullScreen ? R.layout.fragment_step_fullscreen : R.layout.fragment_step),
                 container, false);
         unbinder = ButterKnife.bind(this, view);
+        mVideoLastPosition = C.TIME_UNSET;
+        mVideoPlayed = true;
         if (savedInstanceState != null) {
             mData = savedInstanceState.getParcelable("DATA");
+            mVideoLastPosition = savedInstanceState.getLong("PLAYER_POSITION", C.TIME_UNSET);
+            mVideoPlayed = savedInstanceState.getBoolean("PLAYER_STATUS", true);
         }
         if (mStepDescription != null && mData != null) {
             mStepDescription.setText(mData.getDescription());
@@ -134,7 +159,21 @@ public class StepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("DATA", mData);
+        outState.putLong("PLAYER_POSITION", mVideoLastPosition);
+        outState.putBoolean("PLAYER_STATUS", mVideoPlayed);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
     }
 
     @Override
@@ -158,7 +197,8 @@ public class StepFragment extends Fragment {
                                                                new DefaultExtractorsFactory(), null,
                                                                null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            mExoPlayer.seekTo(mVideoLastPosition);
+            mExoPlayer.setPlayWhenReady(mVideoPlayed);
         }
     }
 
@@ -166,11 +206,17 @@ public class StepFragment extends Fragment {
         return mFullScreen;
     }
 
+    public void setFullScreen(boolean fullScreen) {
+        mFullScreen = fullScreen;
+    }
+
     /**
      * Destroy or release video player when not need again.
      */
     public void releasePlayer() {
         if (mExoPlayer != null) {
+            mVideoLastPosition = mExoPlayer.getCurrentPosition();
+            mVideoPlayed = mExoPlayer.getPlayWhenReady();
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;

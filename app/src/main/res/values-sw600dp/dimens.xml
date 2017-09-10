@@ -21,27 +21,6 @@
   ~ THE SOFTWARE.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/colorWidgetBackgroundIngredient">
-
-    <TextView
-        android:id="@+id/text_ingredient_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/colorWidgetIngredientColor"
-        android:padding="@dimen/margin_default" />
-
-    <TextView
-        android:id="@+id/text_ingredient_size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="@dimen/margin_default"
-        android:textColor="@color/colorWidgetIngredientColor"
-        android:textStyle="italic" />
-
-</LinearLayout>
+<resources>
+    <dimen name="player_size">500dp</dimen>
+</resources>

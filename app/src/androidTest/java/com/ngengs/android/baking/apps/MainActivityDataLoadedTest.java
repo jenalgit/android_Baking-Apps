@@ -71,6 +71,7 @@ public class MainActivityDataLoadedTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void testRecyclerRecipe_Click() {
         Log.d("MainActivityRecipeList", "testRecyclerRecipe_Click: ");
         testRecyclerData();

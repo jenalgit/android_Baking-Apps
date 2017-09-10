@@ -33,4 +33,5 @@
     <!--Widget-->
     <color name="colorWidgetBackgroundEmpty">#BD000000</color>
     <color name="colorWidgetBackgroundIngredient">#FFF</color>
+    <color name="colorWidgetIngredientColor">#111</color>
 </resources>

@@ -100,11 +100,12 @@ public class StepActivity extends AppCompatActivity {
                 mActivePosition = savedInstanceState.getInt("POSITION");
                 mStepFragment = (StepFragment) mFragmentManager.findFragmentById(
                         mFragmentStepLayout.getId());
+                mStepFragment.setFullScreen(isFullScreen());
             }
         }
 
         changeStatusPrevNextButton();
-        changeStep(mActivePosition, false);
+        changeStep(mActivePosition, false, true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -150,12 +151,12 @@ public class StepActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.button_step_prev:
                 if (mActivePosition > 0) {
-                    changeStep(mActivePosition - 1, false);
+                    changeStep(mActivePosition - 1, false, false);
                 }
                 break;
             case R.id.button_step_next:
                 if (mActivePosition < (mData.size() - 1)) {
-                    changeStep(mActivePosition + 1, false);
+                    changeStep(mActivePosition + 1, false, false);
                 }
                 break;
             default:
@@ -184,9 +185,9 @@ public class StepActivity extends AppCompatActivity {
         return fullScreen;
     }
 
-    private void changeStep(int positionNow, boolean forceExitFullScreen) {
-        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s]",
-                 positionNow, forceExitFullScreen);
+    private void changeStep(int positionNow, boolean forceExitFullScreen, boolean fromStart) {
+        Timber.d("changeStep() called with: positionNow = [%s], forceExitFullScreen = [%s], "
+                 + "fromStart = [%s]", positionNow, forceExitFullScreen, fromStart);
         mActivePosition = positionNow;
         mStepIndicator.setText(
                 String.format("%s/%s", mActivePosition, (mData.size() - 1)));
@@ -195,10 +196,12 @@ public class StepActivity extends AppCompatActivity {
 
         boolean fullScreen = !forceExitFullScreen && isFullScreen();
 
-        mStepFragment = StepFragment.newInstance(mData.get(mActivePosition), fullScreen);
-        mFragmentManager.beginTransaction()
-                        .replace(mFragmentStepLayout.getId(), mStepFragment)
-                        .commit();
+        if (!fromStart) {
+            mStepFragment = StepFragment.newInstance(mData.get(mActivePosition), fullScreen);
+            mFragmentManager.beginTransaction()
+                            .replace(mFragmentStepLayout.getId(), mStepFragment)
+                            .commit();
+        }
         if (!TextUtils.isEmpty(mData.get(mActivePosition).getVideoURL())) {
             changeLayoutToFullscreen(fullScreen);
         }
@@ -207,7 +210,7 @@ public class StepActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isFullScreen() && mStepFragment.isFullScreen()) {
-            changeStep(mActivePosition, true);
+            changeStep(mActivePosition, true, false);
         } else {
             super.onBackPressed();
         }

@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.text.TextUtils;
 
@@ -40,6 +39,8 @@ import com.schibsted.spain.barista.BaristaAssertions;
 import com.schibsted.spain.barista.BaristaClickActions;
 import com.schibsted.spain.barista.BaristaScrollActions;
 import com.schibsted.spain.barista.BaristaSleepActions;
+import com.schibsted.spain.barista.flakyespresso.AllowFlaky;
+import com.schibsted.spain.barista.flakyespresso.FlakyActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -57,8 +58,8 @@ public class StepActivityTest {
     private static final int START_POSITION = 1;
     private final List<Step> stepData = DataHelper.buildSteps(STEP_COUNT);
     @Rule
-    public ActivityTestRule<StepActivity> stepActivityActivityTestRule
-            = new ActivityTestRule<StepActivity>(
+    public FlakyActivityTestRule<StepActivity> stepActivityActivityTestRule
+            = new FlakyActivityTestRule<StepActivity>(
             StepActivity.class) {
         @Override
         protected Intent getActivityIntent() {
@@ -78,6 +79,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void layout_Available() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             BaristaAssertions.assertDisplayed(R.id.fragment_step);
@@ -92,6 +94,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void step_DataDisplayCorrectly() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==
@@ -103,6 +106,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void buttonPrev_Clicked() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==
@@ -115,6 +119,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void buttonNext_Clicked() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==
@@ -127,6 +132,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void rotate_KeepData() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==
@@ -139,6 +145,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void buttonNext_ClickedAndRotate() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==
@@ -152,6 +159,7 @@ public class StepActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void buttonPrev_ClickedAndRotate() {
         if (!DeviceHelper.isTablet(mStepActivity)) {
             if (mStepActivity.getResources().getConfiguration().orientation ==

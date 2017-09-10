@@ -37,8 +37,8 @@ if (keystorePropertiesFile.exists()) {
 //Manifest version information!
 int versionMajor = 1
 int versionMinor = 0
-int versionPatch = 0
-int versionBuild = 0 // always bump build number.
+int versionPatch = 1
+int versionBuild = 1 // always bump build number.
 
 android {
     compileSdkVersion 26

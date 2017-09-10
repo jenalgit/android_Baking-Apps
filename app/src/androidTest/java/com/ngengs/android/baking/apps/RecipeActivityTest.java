@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
@@ -42,6 +41,8 @@ import com.schibsted.spain.barista.BaristaAssertions;
 import com.schibsted.spain.barista.BaristaRecyclerViewActions;
 import com.schibsted.spain.barista.BaristaScrollActions;
 import com.schibsted.spain.barista.BaristaSleepActions;
+import com.schibsted.spain.barista.flakyespresso.AllowFlaky;
+import com.schibsted.spain.barista.flakyespresso.FlakyActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,8 +62,8 @@ public class RecipeActivityTest {
     private final List<Ingredient> ingredientData = DataHelper.buildIngredient(INGREDIENT_COUNT);
 
     @Rule
-    public ActivityTestRule<RecipeActivity> recipeActivityActivityTestRule
-            = new ActivityTestRule<RecipeActivity>(
+    public FlakyActivityTestRule<RecipeActivity> recipeActivityActivityTestRule
+            = new FlakyActivityTestRule<RecipeActivity>(
             RecipeActivity.class) {
         @Override
         protected Intent getActivityIntent() {
@@ -82,6 +83,7 @@ public class RecipeActivityTest {
     };
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void layout_Available() {
         Log.d("RecipeActivityTest", "layout_Available: ");
         testLayout();
@@ -89,6 +91,7 @@ public class RecipeActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void title_DataMatch() {
         Log.d("RecipeActivityTest", "title_DataMatch: ");
         MatchHelper.matchToolbarTitle(RECIPE_NAME);
@@ -96,6 +99,7 @@ public class RecipeActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void ingredient_DataMatch() {
         Log.d("RecipeActivityTest", "ingredient_DataMatch: ");
         testDataIngredient();
@@ -105,6 +109,7 @@ public class RecipeActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void step_DataMatch() {
         Log.d("RecipeActivityTest", "step_DataMatch: ");
         BaristaScrollActions.scrollTo(R.id.recycleStep);
@@ -114,6 +119,7 @@ public class RecipeActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void rotate_DataStillAvailable() {
         recipeActivityActivityTestRule.getActivity()
                                       .setRequestedOrientation(
@@ -127,6 +133,7 @@ public class RecipeActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void step_Clicked() {
         BaristaScrollActions.scrollTo(R.id.recycleStep);
         BaristaRecyclerViewActions.clickRecyclerViewItem(R.id.recycleStep, 0);
