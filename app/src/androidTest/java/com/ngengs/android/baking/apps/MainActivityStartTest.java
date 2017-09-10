@@ -23,10 +23,11 @@
 
 package com.ngengs.android.baking.apps;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.schibsted.spain.barista.BaristaAssertions;
+import com.schibsted.spain.barista.flakyespresso.AllowFlaky;
+import com.schibsted.spain.barista.flakyespresso.FlakyActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,16 +38,19 @@ public class MainActivityStartTest {
 
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(
+    public FlakyActivityTestRule<MainActivity> mainActivityActivityTestRule
+            = new FlakyActivityTestRule<>(
             MainActivity.class);
 
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void testRecyclerRecipe_Hidden() {
         BaristaAssertions.assertNotDisplayed(R.id.recyclerRecipes);
     }
 
     @Test
+    @AllowFlaky(attempts = 10)
     public void testPromptLayout_Displayed() {
         BaristaAssertions.assertDisplayed(R.id.prompt_layout);
         BaristaAssertions.assertDisplayed(R.id.prompt_image);
