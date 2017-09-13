@@ -43,18 +43,11 @@ import com.ngengs.android.baking.apps.data.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class RecipeFragment extends Fragment {
     private static final String ARG_PARAM_INGREDIENT = "INGREDIENT";
     private static final String ARG_PARAM_STEP = "STEP";
-    @BindView(R.id.recyclerIngredient)
     RecyclerView mRecyclerIngredient;
-    @BindView(R.id.recycleStep)
     RecyclerView mRecyclerStep;
-    private Unbinder unbinder;
 
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
@@ -120,7 +113,8 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        mRecyclerStep = view.findViewById(R.id.recycleStep);
+        mRecyclerIngredient = view.findViewById(R.id.recyclerIngredient);
         if (savedInstanceState != null) {
             mIngredientList = savedInstanceState.getParcelableArrayList(ARG_PARAM_INGREDIENT);
             mStepList = savedInstanceState.getParcelableArrayList(ARG_PARAM_STEP);
@@ -130,12 +124,9 @@ public class RecipeFragment extends Fragment {
         mRecyclerIngredient.setAdapter(new IngredientAdapter(mIngredientList));
         mRecyclerStep.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerStep.setHasFixedSize(true);
-        mStepAdapter = new StepAdapter(getContext(), mStepList, new StepAdapter.OnClickListener() {
-            @Override
-            public void onClickStep(int position) {
-                if (mListener != null) {
-                    mListener.onRecipeStepClick(position);
-                }
+        mStepAdapter = new StepAdapter(getContext(), mStepList, position -> {
+            if (mListener != null) {
+                mListener.onRecipeStepClick(position);
             }
         });
         mRecyclerStep.setAdapter(mStepAdapter);
@@ -149,12 +140,6 @@ public class RecipeFragment extends Fragment {
         outState.putParcelableArrayList(ARG_PARAM_INGREDIENT, new ArrayList<>(mIngredientList));
         outState.putParcelableArrayList(ARG_PARAM_STEP, new ArrayList<>(mStepList));
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

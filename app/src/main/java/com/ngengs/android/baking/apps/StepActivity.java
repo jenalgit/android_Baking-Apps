@@ -44,21 +44,13 @@ import com.ngengs.android.baking.apps.fragments.StepFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class StepActivity extends AppCompatActivity {
-    @BindView(R.id.fragment_step)
     FrameLayout mFragmentStepLayout;
-    @BindView(R.id.button_step_prev)
     ImageView mButtonStepPrev;
-    @BindView(R.id.step_indicator)
     TextView mStepIndicator;
-    @BindView(R.id.button_step_next)
     ImageView mButtonStepNext;
-    @BindView(R.id.tools_step)
     View mToolsStep;
 
 
@@ -72,7 +64,14 @@ public class StepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_step);
-        ButterKnife.bind(this);
+        mToolsStep = findViewById(R.id.tools_step);
+        mButtonStepNext = findViewById(R.id.button_step_next);
+        mButtonStepPrev = findViewById(R.id.button_step_prev);
+        mStepIndicator = findViewById(R.id.step_indicator);
+        mFragmentStepLayout = findViewById(R.id.fragment_step);
+
+        mButtonStepPrev.setOnClickListener(this::onViewClicked);
+        mButtonStepNext.setOnClickListener(this::onViewClicked);
 
         mFragmentManager = getSupportFragmentManager();
         mActivePosition = 0;
@@ -146,7 +145,6 @@ public class StepActivity extends AppCompatActivity {
         mButtonStepNext.setVisibility((activeNext) ? View.VISIBLE : View.INVISIBLE);
     }
 
-    @OnClick({R.id.button_step_prev, R.id.button_step_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button_step_prev:

@@ -35,9 +35,6 @@ import com.ngengs.android.baking.apps.data.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
     private final List<Ingredient> mData;
 
@@ -65,14 +62,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.text_ingredient_name)
         TextView mTextIngredientName;
-        @BindView(R.id.text_ingredient_size)
         TextView mTextIngredientSize;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            mTextIngredientName = view.findViewById(R.id.text_ingredient_name);
+            mTextIngredientSize = view.findViewById(R.id.text_ingredient_size);
         }
     }
 }

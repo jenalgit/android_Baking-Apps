@@ -59,14 +59,10 @@ public class Connection {
      *
      * @return okHttp client
      */
+    @NonNull
     public static OkHttpClient provideOkHttp(Application application) {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
-                new HttpLoggingInterceptor.Logger() {
-                    @Override
-                    public void log(@NonNull String message) {
-                        Timber.tag("OkHttp").d(message);
-                    }
-                });
+                message -> Timber.tag("OkHttp").d(message));
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         Cache cache = new Cache(application.getCacheDir(), CACHE_SIZE);
@@ -90,6 +86,7 @@ public class Connection {
      *
      * @return retrofit client
      */
+    @NonNull
     public static Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(Connection.BASE_URL)
