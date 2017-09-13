@@ -121,9 +121,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageRecipe;
-        TextView mTextRecipe;
-        TextView mTextServing;
+        private final ImageView mImageRecipe;
+        private final TextView mTextRecipe;
+        private final TextView mTextServing;
 
         ViewHolder(View view) {
             super(view);

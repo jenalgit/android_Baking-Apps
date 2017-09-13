@@ -47,11 +47,11 @@ import java.util.List;
 import timber.log.Timber;
 
 public class StepActivity extends AppCompatActivity {
-    FrameLayout mFragmentStepLayout;
-    ImageView mButtonStepPrev;
-    TextView mStepIndicator;
-    ImageView mButtonStepNext;
-    View mToolsStep;
+    private FrameLayout mFragmentStepLayout;
+    private ImageView mButtonStepPrev;
+    private TextView mStepIndicator;
+    private ImageView mButtonStepNext;
+    private View mToolsStep;
 
 
     private List<Step> mData;
@@ -145,7 +145,7 @@ public class StepActivity extends AppCompatActivity {
         mButtonStepNext.setVisibility((activeNext) ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void onViewClicked(View view) {
+    private void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button_step_prev:
                 if (mActivePosition > 0) {

@@ -55,7 +55,7 @@ import static org.hamcrest.Matchers.greaterThan;
 public class MainActivityDataLoadedTest {
 
     @Rule
-    public FlakyActivityTestRule<MainActivity> mainActivityActivityTestRule
+    public final FlakyActivityTestRule<MainActivity> mainActivityActivityTestRule
             = new FlakyActivityTestRule<>(MainActivity.class);
 
     private IdlingResource mIdlingResource;

@@ -58,7 +58,7 @@ public class StepActivityTest {
     private static final int START_POSITION = 1;
     private final List<Step> stepData = DataHelper.buildSteps(STEP_COUNT);
     @Rule
-    public FlakyActivityTestRule<StepActivity> stepActivityActivityTestRule
+    public final FlakyActivityTestRule<StepActivity> stepActivityActivityTestRule
             = new FlakyActivityTestRule<StepActivity>(
             StepActivity.class) {
         @Override

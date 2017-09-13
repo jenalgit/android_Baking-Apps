@@ -60,11 +60,11 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements Callback<List<Recipe>> {
-    RecyclerView mRecyclerRecipes;
-    ImageView mPromptImage;
-    ProgressBar mPromptProgress;
-    TextView mPromptText;
-    LinearLayout mPromptLayout;
+    private RecyclerView mRecyclerRecipes;
+    private ImageView mPromptImage;
+    private ProgressBar mPromptProgress;
+    private TextView mPromptText;
+    private LinearLayout mPromptLayout;
 
 
     private RecipesAdapter mAdapter;

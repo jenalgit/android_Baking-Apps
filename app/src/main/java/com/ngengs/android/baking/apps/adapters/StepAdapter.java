@@ -127,11 +127,11 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mStepImageThumbnail;
-        ImageView mIndicatorVideo;
-        TextView mStepNumber;
-        TextView mStepShortDescription;
-        View mIndicatorSelected;
+        private final ImageView mStepImageThumbnail;
+        private final ImageView mIndicatorVideo;
+        private final TextView mStepNumber;
+        private final TextView mStepShortDescription;
+        private final View mIndicatorSelected;
 
         ViewHolder(View view) {
             super(view);

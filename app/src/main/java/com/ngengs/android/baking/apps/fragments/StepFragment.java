@@ -53,9 +53,7 @@ public class StepFragment extends Fragment {
     private static final String ARG_STEP_DATA = "PARAM_STEP";
     private static final String ARG_STEP_FULLSCREEN = "PARAM_FULL";
     private static final String ARG_STEP_VIDEO_POSITION = "PARAM_VIDEO_POSITION";
-    SimpleExoPlayerView mStepExoPlayerView;
-    ImageView mStepImageThumbnail;
-    TextView mStepDescription;
+    private SimpleExoPlayerView mStepExoPlayerView;
 
     private SimpleExoPlayer mExoPlayer;
     private Step mData;
@@ -93,7 +91,9 @@ public class StepFragment extends Fragment {
      *
      * @return The instance fragment
      */
-    public static StepFragment newInstance(Step step, boolean fullScreen, long videoPositionStart) {
+    @SuppressWarnings("SameParameterValue")
+    private static StepFragment newInstance(Step step, boolean fullScreen,
+                                            long videoPositionStart) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP_DATA, step);
         args.putBoolean(ARG_STEP_FULLSCREEN, fullScreen);
@@ -120,8 +120,8 @@ public class StepFragment extends Fragment {
                 (mFullScreen ? R.layout.fragment_step_fullscreen : R.layout.fragment_step),
                 container, false);
         mStepExoPlayerView = view.findViewById(R.id.step_video_player);
-        mStepDescription = view.findViewById(R.id.step_description);
-        mStepImageThumbnail = view.findViewById(R.id.step_image_thumbnail);
+        TextView mStepDescription = view.findViewById(R.id.step_description);
+        ImageView mStepImageThumbnail = view.findViewById(R.id.step_image_thumbnail);
         mVideoLastPosition = C.TIME_UNSET;
         mVideoPlayed = true;
         if (savedInstanceState != null) {

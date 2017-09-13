@@ -62,8 +62,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextIngredientName;
-        TextView mTextIngredientSize;
+        private final TextView mTextIngredientName;
+        private final TextView mTextIngredientSize;
 
         ViewHolder(View view) {
             super(view);

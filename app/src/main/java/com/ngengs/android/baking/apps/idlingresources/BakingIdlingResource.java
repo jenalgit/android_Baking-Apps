@@ -33,7 +33,7 @@ public class BakingIdlingResource implements IdlingResource {
     @Nullable
     private ResourceCallback mCallback;
 
-    private AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
+    private final AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
 
     @Override
     public String getName() {

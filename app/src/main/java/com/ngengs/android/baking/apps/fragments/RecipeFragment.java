@@ -46,8 +46,6 @@ import java.util.List;
 public class RecipeFragment extends Fragment {
     private static final String ARG_PARAM_INGREDIENT = "INGREDIENT";
     private static final String ARG_PARAM_STEP = "STEP";
-    RecyclerView mRecyclerIngredient;
-    RecyclerView mRecyclerStep;
 
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
@@ -113,8 +111,8 @@ public class RecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        mRecyclerStep = view.findViewById(R.id.recycleStep);
-        mRecyclerIngredient = view.findViewById(R.id.recyclerIngredient);
+        RecyclerView mRecyclerStep = view.findViewById(R.id.recycleStep);
+        RecyclerView mRecyclerIngredient = view.findViewById(R.id.recyclerIngredient);
         if (savedInstanceState != null) {
             mIngredientList = savedInstanceState.getParcelableArrayList(ARG_PARAM_INGREDIENT);
             mStepList = savedInstanceState.getParcelableArrayList(ARG_PARAM_STEP);

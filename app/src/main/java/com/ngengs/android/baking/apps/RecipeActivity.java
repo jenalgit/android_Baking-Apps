@@ -44,10 +44,9 @@ import timber.log.Timber;
 
 public class RecipeActivity extends AppCompatActivity
         implements RecipeFragment.OnFragmentInteractionListener {
-    FrameLayout mFragmentRecipeLayout;
-    FrameLayout mFragmentStepLayout;
-    Guideline mGuideline;
-    ConstraintLayout mConstraintLayoutRoot;
+    private FrameLayout mFragmentStepLayout;
+    private Guideline mGuideline;
+    private ConstraintLayout mConstraintLayoutRoot;
 
     private Recipe mData;
     private StepFragment mStepFragment;
@@ -58,7 +57,7 @@ public class RecipeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        mFragmentRecipeLayout = findViewById(R.id.fragment_recipe);
+        FrameLayout mFragmentRecipeLayout = findViewById(R.id.fragment_recipe);
         mFragmentStepLayout = findViewById(R.id.fragment_step);
         mGuideline = findViewById(R.id.guideline);
         mConstraintLayoutRoot = findViewById(R.id.constraint_layout_root);
