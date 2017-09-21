@@ -25,6 +25,7 @@ package com.ngengs.android.baking.apps.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -40,9 +41,6 @@ import com.ngengs.android.baking.apps.data.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
@@ -129,25 +127,22 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.stepImageThumbnail)
-        ImageView mStepImageThumbnail;
-        @BindView(R.id.indicatorVideo)
-        ImageView mIndicatorVideo;
-        @BindView(R.id.stepNumber)
-        TextView mStepNumber;
-        @BindView(R.id.stepShortDescription)
-        TextView mStepShortDescription;
-        @BindView(R.id.indicatorSelected)
-        View mIndicatorSelected;
+        private final ImageView mStepImageThumbnail;
+        private final ImageView mIndicatorVideo;
+        private final TextView mStepNumber;
+        private final TextView mStepShortDescription;
+        private final View mIndicatorSelected;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
-        }
-
-        @OnClick(R.id.card_view_step)
-        void onClickCardStep() {
-            mClickListener.onClickStep(getAdapterPosition());
+            mStepImageThumbnail = view.findViewById(R.id.stepImageThumbnail);
+            mIndicatorVideo = view.findViewById(R.id.indicatorVideo);
+            mStepNumber = view.findViewById(R.id.stepNumber);
+            mStepShortDescription = view.findViewById(R.id.stepShortDescription);
+            mIndicatorSelected = view.findViewById(R.id.indicatorSelected);
+            CardView mCardView = view.findViewById(R.id.card_view_step);
+            mCardView.setOnClickListener(
+                    itemClick -> mClickListener.onClickStep(getAdapterPosition()));
         }
     }
 }

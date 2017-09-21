@@ -26,7 +26,6 @@ package com.ngengs.android.baking.apps.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -50,23 +49,11 @@ import com.google.android.exoplayer2.util.Util;
 import com.ngengs.android.baking.apps.R;
 import com.ngengs.android.baking.apps.data.Step;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class StepFragment extends Fragment {
     private static final String ARG_STEP_DATA = "PARAM_STEP";
     private static final String ARG_STEP_FULLSCREEN = "PARAM_FULL";
     private static final String ARG_STEP_VIDEO_POSITION = "PARAM_VIDEO_POSITION";
-    @BindView(R.id.step_video_player)
-    SimpleExoPlayerView mStepExoPlayerView;
-    @Nullable
-    @BindView(R.id.step_image_thumbnail)
-    ImageView mStepImageThumbnail;
-    @Nullable
-    @BindView(R.id.step_description)
-    TextView mStepDescription;
-    private Unbinder unbinder;
+    private SimpleExoPlayerView mStepExoPlayerView;
 
     private SimpleExoPlayer mExoPlayer;
     private Step mData;
@@ -104,7 +91,9 @@ public class StepFragment extends Fragment {
      *
      * @return The instance fragment
      */
-    public static StepFragment newInstance(Step step, boolean fullScreen, long videoPositionStart) {
+    @SuppressWarnings("SameParameterValue")
+    private static StepFragment newInstance(Step step, boolean fullScreen,
+                                            long videoPositionStart) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP_DATA, step);
         args.putBoolean(ARG_STEP_FULLSCREEN, fullScreen);
@@ -130,7 +119,9 @@ public class StepFragment extends Fragment {
         View view = inflater.inflate(
                 (mFullScreen ? R.layout.fragment_step_fullscreen : R.layout.fragment_step),
                 container, false);
-        unbinder = ButterKnife.bind(this, view);
+        mStepExoPlayerView = view.findViewById(R.id.step_video_player);
+        TextView mStepDescription = view.findViewById(R.id.step_description);
+        ImageView mStepImageThumbnail = view.findViewById(R.id.step_image_thumbnail);
         mVideoLastPosition = C.TIME_UNSET;
         mVideoPlayed = true;
         if (savedInstanceState != null) {
@@ -180,7 +171,6 @@ public class StepFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         releasePlayer();
-        unbinder.unbind();
     }
 
     private void initializePlayer(Context context, Uri mediaUri) {

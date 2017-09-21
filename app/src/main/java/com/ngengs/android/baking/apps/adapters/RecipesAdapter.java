@@ -24,6 +24,7 @@
 package com.ngengs.android.baking.apps.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -40,9 +41,6 @@ import com.ngengs.android.baking.apps.remotes.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
@@ -123,21 +121,18 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.image_recipe)
-        ImageView mImageRecipe;
-        @BindView(R.id.text_recipe)
-        TextView mTextRecipe;
-        @BindView(R.id.text_serving)
-        TextView mTextServing;
+        private final ImageView mImageRecipe;
+        private final TextView mTextRecipe;
+        private final TextView mTextServing;
 
         ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
-        }
-
-        @OnClick(R.id.card_view_recipe)
-        void clickRecipeCard() {
-            mClickListener.onClick(mData.get(getAdapterPosition()));
+            mImageRecipe = view.findViewById(R.id.image_recipe);
+            mTextRecipe = view.findViewById(R.id.text_recipe);
+            mTextServing = view.findViewById(R.id.text_serving);
+            CardView mCardView = view.findViewById(R.id.card_view_recipe);
+            mCardView.setOnClickListener(
+                    itemClick -> mClickListener.onClick(mData.get(getAdapterPosition())));
         }
     }
 }

@@ -26,7 +26,6 @@ package com.ngengs.android.baking.apps;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Guideline;
 import android.support.v4.app.FragmentManager;
@@ -41,24 +40,13 @@ import com.ngengs.android.baking.apps.fragments.StepFragment;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class RecipeActivity extends AppCompatActivity
         implements RecipeFragment.OnFragmentInteractionListener {
-
-    @BindView(R.id.fragment_recipe)
-    FrameLayout mFragmentRecipeLayout;
-    @Nullable
-    @BindView(R.id.fragment_step)
-    FrameLayout mFragmentStepLayout;
-    @Nullable
-    @BindView(R.id.guideline)
-    Guideline mGuideline;
-    @Nullable
-    @BindView(R.id.constraint_layout_root)
-    ConstraintLayout mConstraintLayoutRoot;
+    private FrameLayout mFragmentStepLayout;
+    private Guideline mGuideline;
+    private ConstraintLayout mConstraintLayoutRoot;
 
     private Recipe mData;
     private StepFragment mStepFragment;
@@ -69,7 +57,10 @@ public class RecipeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        ButterKnife.bind(this);
+        FrameLayout mFragmentRecipeLayout = findViewById(R.id.fragment_recipe);
+        mFragmentStepLayout = findViewById(R.id.fragment_step);
+        mGuideline = findViewById(R.id.guideline);
+        mConstraintLayoutRoot = findViewById(R.id.constraint_layout_root);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         mStepFragment = null;

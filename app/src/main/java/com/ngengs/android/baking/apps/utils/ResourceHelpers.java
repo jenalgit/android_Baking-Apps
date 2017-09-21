@@ -26,7 +26,7 @@ package com.ngengs.android.baking.apps.utils;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.widget.AppCompatDrawableManager;
+import android.support.graphics.drawable.VectorDrawableCompat;
 
 @SuppressWarnings("unused")
 public class ResourceHelpers {
@@ -64,8 +64,7 @@ public class ResourceHelpers {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             placeholder = context.getResources().getDrawable(drawableId, null);
         } else {
-            //noinspection RestrictedApi
-            placeholder = AppCompatDrawableManager.get().getDrawable(context, drawableId);
+            placeholder = VectorDrawableCompat.create(context.getResources(), drawableId, null);
         }
         return placeholder;
     }
