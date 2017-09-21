@@ -62,7 +62,7 @@ public class RecipeActivityTest {
     private final List<Ingredient> ingredientData = DataHelper.buildIngredient(INGREDIENT_COUNT);
 
     @Rule
-    public FlakyActivityTestRule<RecipeActivity> recipeActivityActivityTestRule
+    public final FlakyActivityTestRule<RecipeActivity> recipeActivityActivityTestRule
             = new FlakyActivityTestRule<RecipeActivity>(
             RecipeActivity.class) {
         @Override

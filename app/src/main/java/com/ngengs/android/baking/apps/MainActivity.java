@@ -54,24 +54,17 @@ import com.ngengs.android.baking.apps.widget.ListRemoteViewsService;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements Callback<List<Recipe>> {
-    @BindView(R.id.recyclerRecipes)
-    RecyclerView mRecyclerRecipes;
-    @BindView(R.id.prompt_image)
-    ImageView mPromptImage;
-    @BindView(R.id.prompt_progress)
-    ProgressBar mPromptProgress;
-    @BindView(R.id.prompt_text)
-    TextView mPromptText;
-    @BindView(R.id.prompt_layout)
-    LinearLayout mPromptLayout;
+    private RecyclerView mRecyclerRecipes;
+    private ImageView mPromptImage;
+    private ProgressBar mPromptProgress;
+    private TextView mPromptText;
+    private LinearLayout mPromptLayout;
 
 
     private RecipesAdapter mAdapter;
@@ -84,45 +77,46 @@ public class MainActivity extends AppCompatActivity implements Callback<List<Rec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        mRecyclerRecipes = findViewById(R.id.recyclerRecipes);
+        mPromptImage = findViewById(R.id.prompt_image);
+        mPromptProgress = findViewById(R.id.prompt_progress);
+        mPromptText = findViewById(R.id.prompt_text);
+        mPromptLayout = findViewById(R.id.prompt_layout);
 
         mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-        mAdapter = new RecipesAdapter(this, new RecipesAdapter.OnClickListener() {
-            @Override
-            public void onClick(Recipe recipe) {
-                Timber.d("onClick: %s", recipe.getName());
-                if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-                    Intent intent = new Intent(getBaseContext(), RecipeActivity.class);
-                    intent.putExtra("DATA", recipe);
-                    startActivity(intent);
-                } else {
-                    Timber.d("onClick: %s. Widget Id: %s", "Finishing widget configuration",
-                             mAppWidgetId);
-                    Context mContext = getApplicationContext();
-                    RemoteViews views = new RemoteViews(getBaseContext().getPackageName(),
-                                                        R.layout.widget_configured);
-                    views.setTextViewText(R.id.widget_title, recipe.getName());
-                    Intent ingredientWidgetListIntent = new Intent(mContext,
-                                                                   ListRemoteViewsService.class);
-                    ArrayList<String> dataIngredient = new ArrayList<>();
-                    ArrayList<String> dataIngredientQuantity = new ArrayList<>();
-                    for (Ingredient mIngredient : recipe.getIngredients()) {
-                        dataIngredient.add(mIngredient.getIngredient());
-                        dataIngredientQuantity.add(String.format("%s %s", mIngredient.getQuantity(),
-                                                                 mIngredient.getMeasure()));
-                    }
-                    ingredientWidgetListIntent.putStringArrayListExtra("INGREDIENT",
-                                                                       dataIngredient);
-                    ingredientWidgetListIntent.putStringArrayListExtra("QUANTITY",
-                                                                       dataIngredientQuantity);
-                    views.setRemoteAdapter(R.id.widget_list, ingredientWidgetListIntent);
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-                    appWidgetManager.updateAppWidget(mAppWidgetId, views);
-                    Intent intentWidget = new Intent();
-                    intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                    setResult(RESULT_OK, intentWidget);
-                    finish();
+        mAdapter = new RecipesAdapter(this, recipe -> {
+            Timber.d("onClick: %s", recipe.getName());
+            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+                Intent intent = new Intent(getBaseContext(), RecipeActivity.class);
+                intent.putExtra("DATA", recipe);
+                startActivity(intent);
+            } else {
+                Timber.d("onClick: %s. Widget Id: %s", "Finishing widget configuration",
+                         mAppWidgetId);
+                Context mContext = getApplicationContext();
+                RemoteViews views = new RemoteViews(getBaseContext().getPackageName(),
+                                                    R.layout.widget_configured);
+                views.setTextViewText(R.id.widget_title, recipe.getName());
+                Intent ingredientWidgetListIntent = new Intent(mContext,
+                                                               ListRemoteViewsService.class);
+                ArrayList<String> dataIngredient = new ArrayList<>();
+                ArrayList<String> dataIngredientQuantity = new ArrayList<>();
+                for (Ingredient mIngredient : recipe.getIngredients()) {
+                    dataIngredient.add(mIngredient.getIngredient());
+                    dataIngredientQuantity.add(String.format("%s %s", mIngredient.getQuantity(),
+                                                             mIngredient.getMeasure()));
                 }
+                ingredientWidgetListIntent.putStringArrayListExtra("INGREDIENT",
+                                                                   dataIngredient);
+                ingredientWidgetListIntent.putStringArrayListExtra("QUANTITY",
+                                                                   dataIngredientQuantity);
+                views.setRemoteAdapter(R.id.widget_list, ingredientWidgetListIntent);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                appWidgetManager.updateAppWidget(mAppWidgetId, views);
+                Intent intentWidget = new Intent();
+                intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                setResult(RESULT_OK, intentWidget);
+                finish();
             }
         });
         mRecyclerRecipes.setHasFixedSize(true);
