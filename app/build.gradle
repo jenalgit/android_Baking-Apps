@@ -88,7 +88,7 @@ android {
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
             }
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFiles fileTree(include: ['*.pro'], dir: 'proguards').asList().toArray()
         }
         debug {
